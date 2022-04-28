@@ -40,19 +40,18 @@ const PokemonCard = (props) => {
                         setName(element.name)
                     }
                 });
-
             })
             .catch(error => console.log(error))
     }, []);
 
     return (
-        <div>
+        <div className='card'>
             <div className="pkmnCard">
                 <p className='pkmnName'>{name}</p>
                 <img src={img} alt="pkmnImage" className='pkmnImage' />
-                <div>
-                    <Type type={type1} />
-                    <Type type={type2} />
+                <div className='types'>
+                    {type1 ? <Type type={type1} /> : <div className='emptyType'></div>}
+                    {type2 ? <Type type={type2} /> : <div className='emptyType'></div>}
                 </div>
             </div>
 
