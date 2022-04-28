@@ -1,7 +1,7 @@
-import logo from './logo.svg';
-import Pokedex from 'pokedex-promise-v2';
 import './App.css';
 import { useEffect, useState } from 'react';
+import Header from './components/Header';
+import 'antd/dist/antd.css'
 
 function App() {
   
@@ -12,17 +12,17 @@ function App() {
     fetch('https://pokeapi.co/api/v2/pokemon/44/')
     .then(response => response.json())
     .then(data => {
-      //setdata(data)
+      setdata(data)
       console.log(data)
-      //setImg(data.sprites.other.dream_world.front_default)
+      setImg(data.sprites.other.dream_world.front_default)
     })
     .catch(error => console.log(error))
   }, [])
 
-  console.log("oui")
   return (
 
     <div className="App">
+      <Header />  
       <header className="App-header">
         <img src={img} className="App-logo" alt="logo" />
         <p>

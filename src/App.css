@@ -14,7 +14,7 @@
 }
 
 .App-header {
-  background-color: #282c34;
+  background-color: #242424;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
@@ -32,7 +32,68 @@
   from {
     transform: rotate(0deg);
   }
+
   to {
     transform: rotate(360deg);
   }
+}
+
+.Header {
+  top: 0;
+  position: sticky;
+
+  display: block;
+  width:100%;
+}
+
+.headerBar {
+  background-color: #1a1a1a;
+  text-align: center;
+  border-bottom: 1px solid #3d3d3d;
+
+  width:100%;
+
+  display: flex;
+  justify-content: center;
+}
+
+.searchBar{
+  display: inline-flex;
+  background-color: #242424;
+  color: #aaaaaa;
+
+  border: 1px solid #3d3d3d; 
+  border-radius: 1em;
+
+  width: 35%;
+  margin-top: .5%;
+  margin-bottom: .5%;
+}
+
+.searchLogo{
+  background-color: #242424;
+  color: #aaaaaa;
+  font-size: 20px;
+  width: 10%;
+  height: max-content;
+  border-radius: 1em;
+}
+
+.searchBarInput{
+  background-color: #242424;
+  color: #aaaaaa;
+
+  font-size: 20px;
+  border-radius: 1em;
+
+  width: 100%;
+  border: none;
+}
+
+.searchBar:focus-within{
+  border: 1px solid #e4e4e4;
+}
+
+.searchBarInput:focus{
+  outline: none;
 }
