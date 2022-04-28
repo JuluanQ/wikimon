@@ -1,18 +1,30 @@
 import logo from './logo.svg';
 import Pokedex from 'pokedex-promise-v2';
 import './App.css';
+import { useEffect, useState } from 'react';
 
 function App() {
-
-  fetch('https://pokeapi.co/api/v2/pokemon/44/')
-  .then(response => response.json())
-  .then(data => console.log(data))
-  .catch(error=> console.log(error))
   
+  const [img, setImg] = useState(String);
+  const [data, setdata] = useState(JSON);
+
+  useEffect(() =>{
+    fetch('https://pokeapi.co/api/v2/pokemon/44/')
+    .then(response => response.json())
+    .then(data => {
+      //setdata(data)
+      console.log(data)
+      //setImg(data.sprites.other.dream_world.front_default)
+    })
+    .catch(error => console.log(error))
+  }, [])
+
+  console.log("oui")
   return (
+
     <div className="App">
       <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
+        <img src={img} className="App-logo" alt="logo" />
         <p>
           Edit <code>src/App.js</code> and save to reload.
         </p>
