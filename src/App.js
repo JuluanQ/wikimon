@@ -2,6 +2,7 @@ import './App.css';
 import { useEffect, useState } from 'react';
 import Header from './components/Header';
 import 'antd/dist/antd.css'
+import PokemonCard from './components/PokemonCard';
 
 function App() {
   
@@ -18,6 +19,8 @@ function App() {
     })
     .catch(error => console.log(error))
   }, [])
+
+  
 
   return (
 
@@ -36,6 +39,8 @@ function App() {
         >
           Learn React
         </a>
+        
+        <PokemonCard id={Math.floor(Math.random() * (898-1)) + 1} />
       </header>
     </div>
   );
