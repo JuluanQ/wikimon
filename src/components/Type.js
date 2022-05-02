@@ -28,9 +28,6 @@ const Type = (props) => {
         if (props.type != undefined) {
             setType(typesUrl[props.type])
         }
-        console.log(props.type)
-        console.log(typesUrl[props.type])
-        console.log(type)
     }, []);
 
     return (

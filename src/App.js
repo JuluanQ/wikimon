@@ -3,45 +3,48 @@ import { useEffect, useState } from 'react';
 import Header from './components/Header';
 import 'antd/dist/antd.css'
 import PokemonCard from './components/PokemonCard';
+import Footer from './components/Footer';
+import { Slider } from 'antd';
+import PokemonList from './components/PokemonList';
 
 function App() {
-  
+
   const [img, setImg] = useState(String);
   const [data, setdata] = useState(JSON);
 
-  useEffect(() =>{
-    fetch('https://pokeapi.co/api/v2/pokemon/44/')
-    .then(response => response.json())
-    .then(data => {
-      setdata(data)
-      console.log(data)
-      setImg(data.sprites.other.dream_world.front_default)
-    })
-    .catch(error => console.log(error))
+  useEffect(() => {
+    fetch('https://pokeapi.co/api/v2/pokemon/?limit=60')
+      .then(response => response.json())
+      .then(data => {
+        setdata(data.results)
+      })
+      .catch(error => console.log(error))
   }, [])
 
-  
+
 
   return (
 
     <div className="App">
-      <Header />  
-      <header className="App-header">
-        <img src={img} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-        
-        <PokemonCard id={Math.floor(Math.random() * (898-1)) + 1} />
-      </header>
+      <Header />
+      <div className="Panes">
+        <div className="leftPane">
+          <PokemonCard id={Math.floor(Math.random() * (898 - 1)) + 1} />
+        </div>
+        <div className="middlePane">
+
+          <Slider min={0} max={200} defaultValue={50} step={1} onChange={(value) => {
+            console.log(value)
+          }} />
+          {data ?
+            <PokemonList list={data} nb={50} />
+            : <div></div>}
+        </div>
+        <div className="rightPane">
+
+        </div>
+      </div>
+      <Footer />
     </div>
   );
 }
