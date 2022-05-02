@@ -34,8 +34,24 @@ function App() {
         <div className="middlePane">
 
           <Slider min={0} max={200} defaultValue={50} step={1} onChange={(value) => {
-            console.log(value)
+            var pkmnList = document.getElementById("imgsDiv")
+            if (pkmnList.hasChildNodes()) {
+              var children = pkmnList.childNodes
+              for (let i = 0; i < children.length; i++) {
+                const element = children[i];
+                if (i < value) {
+                  element.style.visibility = 'visible'
+                  element.style.width = '7em'
+                  element.style.height = '7em'
+                } else {
+                  element.style.visibility = 'hidden'
+                  element.style.width = '0em'
+                  element.style.height = '0em'
+                }
+              }
+            }
           }} />
+
           {data ?
             <PokemonList list={data} nb={50} />
             : <div></div>}

@@ -12,13 +12,18 @@ const PokemonList = (props) => {
 
             var imgsDiv = document.createElement("div")
             imgsDiv.setAttribute("id", "imgsDiv")
-            for (var i = 1; i <= props.nb; i++) {
+            for (var i = 1; i <= 811; i++) {
                 var img = ""
                 img = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/dream-world/" + i + ".svg"
                 var pkmnImage = document.createElement("img")
                 pkmnImage.src = img
                 pkmnImage.className = "pkmnListItemImage"
                 imgsDiv.appendChild(pkmnImage)
+                if (i > props.nb) {
+                    pkmnImage.style.visibility = 'hidden'
+                    pkmnImage.style.width = '0em'
+                    pkmnImage.style.height = '0em'
+                }
             }
             var pkmnList = document.getElementById("PokemonList")
             pkmnList.appendChild(imgsDiv)

@@ -169,5 +169,7 @@ body {
 }
 
 .middlePane .ant-slider {
+  margin-top: 2%;
+  margin-left: 2%;
   width: 30%;
 }
