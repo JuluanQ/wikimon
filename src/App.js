@@ -11,7 +11,6 @@ function App() {
 
   const [img, setImg] = useState(String);
   const [data, setdata] = useState(JSON);
-
   useEffect(() => {
     fetch('https://pokeapi.co/api/v2/pokemon/?limit=60')
       .then(response => response.json())
@@ -32,29 +31,32 @@ function App() {
           <PokemonCard id={Math.floor(Math.random() * (898 - 1)) + 1} />
         </div>
         <div className="middlePane">
+          <Slider min={1} max={200} defaultValue={20} step={1} dots={true} onChange={(value) => {
+            var pkmnList = document.getElementById("PokemonList")
+            var nbPrinted = pkmnList.children.length
 
-          <Slider min={0} max={200} defaultValue={50} step={1} onChange={(value) => {
-            var pkmnList = document.getElementById("imgsDiv")
-            if (pkmnList.hasChildNodes()) {
-              var children = pkmnList.childNodes
-              for (let i = 0; i < children.length; i++) {
-                const element = children[i];
-                if (i < value) {
-                  element.style.visibility = 'visible'
-                  element.style.width = '7em'
-                  element.style.height = '7em'
-                } else {
-                  element.style.visibility = 'hidden'
-                  element.style.width = '0em'
-                  element.style.height = '0em'
-                }
+            if (pkmnList.hasChildNodes) {
+              var id_lastChild = parseInt(pkmnList.lastChild.id.replace("list_id_", ""))
+              if (value > id_lastChild + 1) {
+                console.warn("Should not happen")
+                // TODO
+                // empecher de changer la value
+              }
+              if (nbPrinted < value) {
+                var img = ""
+                img = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/dream-world/" + value + ".svg"
+                var pkmnImage = document.createElement("img")
+                pkmnImage.src = img
+                pkmnImage.className = "pkmnListItemImage"
+                pkmnImage.id = "list_id_" + value
+                pkmnList.appendChild(pkmnImage)
+              }
+              else {
+                pkmnList.removeChild(pkmnList.children[nbPrinted - 1])
               }
             }
           }} />
-
-          {data ?
-            <PokemonList list={data} nb={50} />
-            : <div></div>}
+          <PokemonList />
         </div>
         <div className="rightPane">
 

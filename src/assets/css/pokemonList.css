@@ -1,15 +1,11 @@
 .PokemonList {
-    width: fit-content;
-    height: 80%;
-}
-
-#imgsDiv {
+    flex-wrap: wrap;
     margin: 5%;
-    overflow-y: auto;
+    overflow-y: scroll;
+    height: 200px;
 }
 
 .pkmnListItemImage {
     width: 7em;
     height: 7em;
-    flex-wrap: wrap;
 }
