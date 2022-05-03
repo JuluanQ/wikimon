@@ -1,8 +1,12 @@
-.PokemonList {
-    flex-wrap: wrap;
+#PokemonList {
     margin: 5%;
-    overflow-y: scroll;
-    height: 200px;
+    overflow-y: auto;
+    overflow-x: none;
+    height: 50em;
+}
+
+#imgsList {
+    display: block;
 }
 
 .pkmnListItemImage {

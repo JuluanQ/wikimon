@@ -12,7 +12,7 @@ const menu = (
     <Menu style={style} theme="dark"
         items={[
             {
-                label: "Try typing p/... or u/... !",
+                label: "Try typing p/... or t/... !",
                 key: 0,
             }
         ]}
@@ -29,12 +29,39 @@ const Header = () => {
                         <SearchOutlined className='searchLogo' />
                         <input type="search"
                             className='searchBarInput'
-                            placeholder='Search on Wikimon' />
+                            placeholder='Search on Wikimon'
+                            onChange={search} />
                     </div>
                 </Dropdown>
             </div>
         </div >
     );
 };
+
+function search(textInput) {
+    var text = textInput.target.value
+    switch (text) {
+        case "p/":
+            console.log("Searching a Pokemon")
+            break;
+        case "t/":
+            console.log("Searching a Type")
+            break;
+        case "m/":
+            console.log("Searching a Move")
+            break;
+        case "i/":
+            console.log("Searching an Item")
+            break;
+        case "b/":
+            console.log("Searching a Berry")
+            break;
+        case "g/":
+            console.log("Searching a Game")
+            break;
+        default:
+            break;
+    }
+}
 
 export default Header;

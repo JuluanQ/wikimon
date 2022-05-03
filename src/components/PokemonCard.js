@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from 'react';
+import { NavLink } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import '../assets/css/pokemonCard.css'
 import Type from './Type';
 
@@ -45,7 +47,7 @@ const PokemonCard = (props) => {
     }, []);
 
     return (
-        <div className='card'>
+        <div className='card' >
             <div className="pkmnCard">
                 <p className='pkmnName'>{name}</p>
                 <img src={img} alt="pkmnImage" className='pkmnImage' />
@@ -54,7 +56,6 @@ const PokemonCard = (props) => {
                     {type2 ? <Type type={type2} /> : <div className='emptyType'></div>}
                 </div>
             </div>
-
         </div>
     );
 };
