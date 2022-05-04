@@ -1,12 +1,12 @@
 #PokemonList {
     margin: 5%;
     overflow-y: auto;
-    overflow-x: none;
+    overflow-x: hidden;
     height: 50em;
 }
 
-#imgsList {
-    display: block;
+#PokemonList a {
+    display: inline-block;
 }
 
 .pkmnListItemImage {

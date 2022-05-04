@@ -5,12 +5,12 @@ import Header from '../components/Header';
 import PokemonCard from '../components/PokemonCard';
 import Footer from '../components/Footer';
 import PokemonList from '../components/PokemonList';
+import App from '../App';
 
 import 'antd/dist/antd.css'
 import { Slider, notification } from 'antd';
 
-function Home() {
-
+function Home(props) {
   const openNotification = placement => {
     notification.info({
       icon: <div></div>,
@@ -38,8 +38,13 @@ function Home() {
   }
 
   const [links, setLinks] = useState([]);
+  const [randomId, setRandomId] = useState(null);
 
   useEffect(() => {
+    setRandomId(Math.floor(Math.random() * (898 - 1)) + 1)
+
+
+
     openNotification('bottomLeft')
     fetch('https://pokeapi.co/api/v2/pokemon/?limit=811')
       .then(response => response.json())
@@ -53,19 +58,17 @@ function Home() {
 
 
   return (
-
     <div className="App">
-      <Header />
+      <Header nav={props.nav} />
       <div className="Panes">
         <div className="leftPane">
           {/* //Pokemon Aléatoire */}
-          <PokemonCard id={Math.floor(Math.random() * (898 - 1)) + 1} />
-
+          {randomId ? <PokemonCard id={randomId} /> : <div></div>}
         </div>
         <div className="middlePane">
 
           {/* Définition du slider permettant d'afficher plus ou moins de pokemon */}
-          <Slider min={1} max={200} defaultValue={60} step={1} onChange={(value) => {
+          <Slider tooltipVisible tooltipPlacement='top' min={1} max={811} defaultValue={60} step={1} onChange={(value) => {
             var pkmnList = document.getElementById("imgsList")
             var children = pkmnList.childNodes
             if (pkmnList.hasChildNodes) {
@@ -73,19 +76,25 @@ function Home() {
               //On parcours les éléments de la liste
               for (let i = 0; i < children.length; i++) {
                 const element = children[i];
+                const child = element.childNodes[0]
 
                 if (i < value) {
                   element.style.visibility = 'visible'
                   element.style.width = '7em'
                   element.style.height = '7em'
+                  child.style.visibility = 'visible'
+                  child.style.width = '7em'
+                  child.style.height = '7em'
                 } else {
                   element.style.visibility = 'hidden'
                   element.style.width = '0em'
                   element.style.height = '0em'
+                  child.style.visibility = 'hidden'
+                  child.style.width = '0em'
+                  child.style.height = '0em'
                 }
               }
             }
-
           }} />
 
 

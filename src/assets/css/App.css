@@ -63,6 +63,17 @@ body {
   justify-self: center;
 }
 
+.homeLogo {
+  color: "#aaaaaa";
+  font-size: "2em";
+  align-self: "center";
+  justify-self: "center";
+  display: "block";
+  position: "absolute";
+  left: "3em"
+
+}
+
 .searchBarInput {
   background-color: #242424;
   color: #aaaaaa;

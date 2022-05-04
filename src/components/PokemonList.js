@@ -2,6 +2,7 @@ import React from 'react';
 import { useEffect, useState } from 'react';
 import "../assets/css/pokemonList.css"
 import { LoadingOutlined } from '@ant-design/icons'
+import { NavLink } from 'react-router-dom';
 
 const PokemonList = (props) => {
 
@@ -25,18 +26,23 @@ const PokemonList = (props) => {
                 imgElement.alt = data.name;
                 imgElement.className = "pkmnListItemImage"
 
+
+                var navlink = document.createElement("a")
+                navlink.setAttribute("href", "/pokemon/" + data.id)
                 if (data.id > props.nb) {
-                    imgElement.style.visibility = 'hidden'
-                    imgElement.style.height = '0'
-                    imgElement.style.width = '0'
+                    navlink.style.visibility = 'hidden'
+                    navlink.style.height = '0'
+                    navlink.style.width = '0'
 
                 } else {
-                    imgElement.style.visibility = 'visible'
-                    imgElement.style.height = '7em'
-                    imgElement.style.width = '7em'
+                    navlink.style.visibility = 'visible'
+                    navlink.style.height = '7em'
+                    navlink.style.width = '7em'
 
                 }
-                imgsList.appendChild(imgElement)
+
+                imgsList.appendChild(navlink)
+                navlink.appendChild(imgElement)
             })
             pkmnList.appendChild(imgsList)
         }
