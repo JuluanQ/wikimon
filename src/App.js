@@ -5,7 +5,14 @@ import Home from './pages/Home.js';
 import Loading from './pages/Loading.js';
 import PokemonPage from './pages/PokemonPage.js';
 
+//REDUX
+import { useSelector, useDispatch } from 'react-redux';
+import { setDataPkmn } from './dataPkmnSlice.js';
+
 const App = () => {
+
+    //REDUX
+    const dispatch = useDispatch()
 
     const [loading, setLoading] = useState(false);
     const [promises, setPromises] = useState([]);
@@ -31,8 +38,9 @@ const App = () => {
                 const failures = results
                     .filter(x => x.status === "rejected")
                     .map(x => x.reason)
-                setData(successes)
+                //setData(successes)
                 setLoading(false)
+                dispatch(setDataPkmn(successes))
             })
     }, [links])
 

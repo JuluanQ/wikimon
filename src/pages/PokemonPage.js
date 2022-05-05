@@ -5,14 +5,22 @@ import Footer from '../components/Footer';
 
 import '../assets/css/App.css';
 import PokemonCard from '../components/PokemonCard';
-import { useParams } from 'react-router-dom';
+import { useParams, useLocation } from 'react-router-dom';
 
 const PokemonPage = (props) => {
     const param = useParams()
 
+    const [dataPkmn, setDataPkmn] = useState();
+    const [dataSpecies, setDataSpecies] = useState();
+    const [desc, setDesc] = useState();
+    const [moves, setMoves] = useState([]);
+
     const [randomId, setRandomId] = useState(null);
 
+    const location = useLocation();
+
     useEffect(() => {
+        console.log(location)
         setRandomId(Math.floor(Math.random() * (898 - 1)) + 1)
         console.log(randomId)
     }, []);
@@ -26,7 +34,12 @@ const PokemonPage = (props) => {
                     {randomId ? <PokemonCard id={randomId} /> : <div></div>}
                 </div>
                 <div className="middlePane">
-                    <PokemonCard id={param.id} />
+                    {
+                        dataPkmn ?
+                            <PokemonCard id={dataPkmn.id} />
+                            :
+                            <div></div>
+                    }
                 </div>
                 <div className="rightPane">
 

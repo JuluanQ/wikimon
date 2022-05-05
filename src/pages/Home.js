@@ -10,6 +10,8 @@ import App from '../App';
 import 'antd/dist/antd.css'
 import { Slider, notification } from 'antd';
 
+import { useSelector, useDispatch } from 'react-redux';
+
 function Home(props) {
   const openNotification = placement => {
     notification.info({
@@ -40,6 +42,10 @@ function Home(props) {
   const [links, setLinks] = useState([]);
   const [randomId, setRandomId] = useState(null);
 
+  //REDUX
+  const dataPkmn = useSelector((state) => state.dataPkmn.value)
+
+
   useEffect(() => {
     setRandomId(Math.floor(Math.random() * (898 - 1)) + 1)
 
@@ -60,6 +66,13 @@ function Home(props) {
   return (
     <div className="App">
       <Header nav={props.nav} />
+
+      {
+        dataPkmn ?
+          console.log(dataPkmn) :
+          console.log("fail")
+      }
+
       <div className="Panes">
         <div className="leftPane">
           {/* //Pokemon Aléatoire */}

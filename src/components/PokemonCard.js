@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { NavLink, Link } from 'react-router-dom';
-import { useNavigate } from 'react-router-dom';
 import '../assets/css/pokemonCard.css'
 import Type from './Type';
 
@@ -50,20 +49,29 @@ const PokemonCard = (props) => {
 
     return (
         <div className='card' >
-            <Link to={"/pokemon/" + pkmnId} params={pkmnId}>
-                <div className="pkmnCard">
-                    <p className='pkmnName'>{name}</p>
-                    <img src={img} alt="pkmnImage" className='pkmnImage' />
-                    <div className='types'>
-                        {type1 ?
-                            <Type type={type1} />
-                            : <div className='emptyType'></div>}
-                        {type2 ?
-                            <Type type={type2} />
-                            : <div className='emptyType'></div>}
-                    </div>
-                </div>
-            </Link>
+            {
+                dataPkmn && dataSpecies ?
+                    <Link to={{
+                        pathname: "/pokemon/" + dataPkmn.id,
+                        state: { pkmnData: dataPkmn, speciesData: dataSpecies }
+                    }}>
+                        <div className="pkmnCard">
+                            <p className='pkmnName'>{name}</p>
+                            <img src={img} alt="pkmnImage" className='pkmnImage' />
+                            <div className='types'>
+                                {type1 ?
+                                    <Type type={type1} />
+                                    : <div className='emptyType'></div>}
+                                {type2 ?
+                                    <Type type={type2} />
+                                    : <div className='emptyType'></div>}
+                            </div>
+                        </div>
+                    </Link>
+                    :
+                    <div></div>
+            }
+
         </div>
     );
 };
