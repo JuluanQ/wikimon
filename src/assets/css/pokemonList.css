@@ -2,7 +2,7 @@
     margin: 5%;
     overflow-y: auto;
     overflow-x: hidden;
-    height: 50em;
+    height: 75%;
 }
 
 #PokemonList a {

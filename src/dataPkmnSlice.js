@@ -3,16 +3,21 @@ import { createSlice } from "@reduxjs/toolkit";
 export const dataPkmnSlice = createSlice({
   name: 'dataPkmn',
   initialState: {
-    value: [],
+    pkmn: [],
+    species: [],
   },
   reducers: {
     setDataPkmn: (state, data) => {
-      state.value = data;
+      state.pkmn = data;
+    },
+
+    setDataSpecies: (state, data) => {
+      state.species = data;
     },
   },
 })
 
 // Action creators are generated for each case reducer function
-export const { setDataPkmn } = dataPkmnSlice.actions
+export const { setDataPkmn, setDataSpecies } = dataPkmnSlice.actions
 
 export default dataPkmnSlice.reducer

@@ -2,6 +2,7 @@ import { Iterable } from 'immutable'
 
 import { configureStore } from '@reduxjs/toolkit'
 import dataPkmnSliceReducer from './dataPkmnSlice.js'
+import linksPkmnSliceReducer from './linksPkmnSlice.js'
 
 import {
     createSerializableStateInvariantMiddleware,
@@ -11,5 +12,9 @@ import {
 export default configureStore({
     reducer: {
         dataPkmn: dataPkmnSliceReducer,
+        linksPkmn: linksPkmnSliceReducer,
     },
+    middleware: getDefaultMiddleware => getDefaultMiddleware({
+        serializableCheck: false
+    })
 })

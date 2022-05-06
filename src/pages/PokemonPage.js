@@ -7,23 +7,42 @@ import '../assets/css/App.css';
 import PokemonCard from '../components/PokemonCard';
 import { useParams, useLocation } from 'react-router-dom';
 
+import { useSelector } from 'react-redux';
+
 const PokemonPage = (props) => {
     const param = useParams()
 
-    const [dataPkmn, setDataPkmn] = useState();
-    const [dataSpecies, setDataSpecies] = useState();
+    const [data, setData] = useState();
+    const [species, setSpecies] = useState([]);
     const [desc, setDesc] = useState();
     const [moves, setMoves] = useState([]);
+    const [img, setImg] = useState(String);
 
-    const [randomId, setRandomId] = useState(null);
-
-    const location = useLocation();
+    //Redux
+    const dataPkmn = useSelector((state) => state.dataPkmn.pkmn)
+    const dataSpecies = useSelector((state) => state.dataPkmn.species)
 
     useEffect(() => {
-        console.log(location)
-        setRandomId(Math.floor(Math.random() * (898 - 1)) + 1)
-        console.log(randomId)
-    }, []);
+        if (data) {
+            if (data.sprites.other.dream_world.front_default != null) {
+                setImg(data.sprites.other.dream_world.front_default)
+            } else if (data.sprites.other.home.front_default != null) {
+                setImg(data.sprites.other.home.front_default)
+            }
+        }
+    }, [data]);
+
+    useEffect(() => {
+        var id = param.id
+        setData(dataPkmn.payload[id - 1])
+        setSpecies(dataSpecies.payload[id - 1])
+    }, [param]);
+
+    useEffect(() => {
+        if (species) {
+
+        }
+    }, [species])
 
     return (
         <div className="App">
@@ -31,12 +50,12 @@ const PokemonPage = (props) => {
             <div className="Panes">
                 <div className="leftPane">
                     {/* //Pokemon Aléatoire */}
-                    {randomId ? <PokemonCard id={randomId} /> : <div></div>}
+                    <PokemonCard id={Math.floor(Math.random() * (811 - 1)) + 1} />
                 </div>
                 <div className="middlePane">
                     {
-                        dataPkmn ?
-                            <PokemonCard id={dataPkmn.id} />
+                        data ?
+                            <img src={img} alt="pkmnImage" style={{ width: "7em" }} />
                             :
                             <div></div>
                     }

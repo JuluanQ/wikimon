@@ -6,43 +6,21 @@ import Loading from './pages/Loading.js';
 import PokemonPage from './pages/PokemonPage.js';
 
 //REDUX
-import { useSelector, useDispatch } from 'react-redux';
-import { setDataPkmn } from './dataPkmnSlice.js';
+import { useDispatch } from 'react-redux';
+import { setDataPkmn, setDataSpecies } from './dataPkmnSlice.js';
+import { setLinksPkmn } from './linksPkmnSlice.js';
 
 const App = () => {
 
-    //REDUX
     const dispatch = useDispatch()
 
-    const [loading, setLoading] = useState(false);
-    const [promises, setPromises] = useState([]);
+    const [done, setDone] = useState(undefined);
+    const [promisesPkmn, setPromisesPkmn] = useState([]);
+    const [promisesSpecies, setPromisesSpecies] = useState([]);
     const [links, setLinks] = useState([]);
-    const [data, setData] = useState([]);
-
-    useEffect(() => {
-        setLoading(true)
-
-        //Initialisation d'un array de Promise 
-        links.forEach(item => {
-            const promise = fetch(item).then(response => { return response.json(); })
-            promise.catch((error) => console.error(error))
-            promises.push(promise)
-        })
-
-        //Lorsque toutes les Promise ont été terminées
-        Promise.allSettled(promises)
-            .then((results) => {
-                const successes = results
-                    .filter(x => x.status === "fulfilled")
-                    .map(x => x.value)
-                const failures = results
-                    .filter(x => x.status === "rejected")
-                    .map(x => x.reason)
-                //setData(successes)
-                setLoading(false)
-                dispatch(setDataPkmn(successes))
-            })
-    }, [links])
+    const [pkmnData, setPkmnData] = useState();
+    const [speciesData, setSpeciesData] = useState();
+    const [progress, setProgress] = useState(0);
 
     useEffect(() => {
         fetch('https://pokeapi.co/api/v2/pokemon/?limit=811')
@@ -50,19 +28,76 @@ const App = () => {
             .then(data => {
                 const map = data.results.map(item => item.url)
                 setLinks(map)
+                setProgress(20)
+                dispatch(setLinksPkmn(map))
             })
             .catch(error => console.log(error))
     }, []);
 
-    return (
-        <Routes>
-            <Route name="home" path="/" element={<Home />} > </Route>
-            <Route name="pokemon" path="/pokemon/:id" element={<PokemonPage />}></Route>
-            <Route path="/loading" element={<Loading />}></Route>
+    useEffect(() => {
 
-            {/* path="*" route si url non déclaré */}
-            <Route path="*" element={<Home />}> </Route>
-        </Routes >
+        //Initialisation d'un array de Promise 
+        links.forEach(item => {
+            const promise = fetch(item).then(response => { return response.json(); })
+            promise.catch((error) => console.error(error))
+            promisesPkmn.push(promise)
+            setProgress(30)
+        })
+
+        //Lorsque toutes les Promise ont été terminées
+        Promise.allSettled(promisesPkmn)
+            .then((results) => {
+                const successes = results
+                    .filter(x => x.status === "fulfilled")
+                    .map(x => x.value)
+                setPkmnData(successes)
+                if (pkmnData) {
+                    setProgress(65)
+                }
+                dispatch(setDataPkmn(successes))
+            })
+    }, [links])
+
+    useEffect(() => {
+        if (pkmnData) {
+            pkmnData.forEach(item => {
+                const promise = fetch(item.species.url).then(response => { return response.json(); })
+                promise.catch((error) => console.error(error))
+                promisesSpecies.push(promise)
+            })
+
+            Promise.allSettled(promisesSpecies)
+                .then((results) => {
+                    const successes = results
+                        .filter(x => x.status === "fulfilled")
+                        .map(x => x.value)
+                    setSpeciesData(successes)
+                    if (speciesData) {
+                        setProgress(100)
+                        setDone(true)
+                    }
+                    dispatch(setDataSpecies(successes))
+                })
+        }
+    }, [pkmnData]);
+
+    return (
+        <>
+            {
+                done ?
+
+                    <Routes>
+                        <Route path="/loading" element={<Loading progress={progress} />}></Route>
+                        <Route name="home" path="/" element={<Home />} > </Route>
+                        <Route name="pokemon" path="/pokemon/:id" element={<PokemonPage />}></Route>
+
+                        <Route path="*" element={<Home />}> </Route>
+                    </Routes >
+                    :
+                    <Loading progress={progress} />
+            }
+        </>
+
     );
 }
 
