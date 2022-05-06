@@ -1,6 +1,9 @@
-# Getting Started with Create React App
+# You first need to have some libraries
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+### `npm install antd`
+### `npm install react-bootstrap bootstrap`
+### `npm install @reduxjs/toolkit redux`
+### `npm install react-router-dom`
 
 ## Available Scripts
 
