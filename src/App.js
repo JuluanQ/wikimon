@@ -7,8 +7,7 @@ import PokemonPage from './pages/PokemonPage.js';
 
 //REDUX
 import { useDispatch } from 'react-redux';
-import { setDataPkmn, setDataSpecies } from './dataPkmnSlice.js';
-import { setLinksPkmn } from './linksPkmnSlice.js';
+import { setDataPkmn, setDataSpecies, setLinksPkmn } from './dataPkmnSlice.js';
 
 const App = () => {
 
@@ -18,8 +17,8 @@ const App = () => {
     const [promisesPkmn, setPromisesPkmn] = useState([]);
     const [promisesSpecies, setPromisesSpecies] = useState([]);
     const [links, setLinks] = useState([]);
-    const [pkmnData, setPkmnData] = useState();
-    const [speciesData, setSpeciesData] = useState();
+    const [pkmnData, setPkmnData] = useState(undefined);
+    const [speciesData, setSpeciesData] = useState(undefined);
     const [progress, setProgress] = useState(0);
 
     useEffect(() => {
@@ -28,8 +27,9 @@ const App = () => {
             .then(data => {
                 const map = data.results.map(item => item.url)
                 setLinks(map)
-                setProgress(20)
-                dispatch(setLinksPkmn(map))
+                if (links) {
+                    setProgress(20)
+                }
             })
             .catch(error => console.log(error))
     }, []);

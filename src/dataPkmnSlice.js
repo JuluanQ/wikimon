@@ -5,6 +5,7 @@ export const dataPkmnSlice = createSlice({
   initialState: {
     pkmn: [],
     species: [],
+    links: [],
   },
   reducers: {
     setDataPkmn: (state, data) => {
@@ -14,10 +15,14 @@ export const dataPkmnSlice = createSlice({
     setDataSpecies: (state, data) => {
       state.species = data;
     },
+
+    setLinksPkmn: (state, data) => {
+      state.links = data;
+    },
   },
 })
 
 // Action creators are generated for each case reducer function
-export const { setDataPkmn, setDataSpecies } = dataPkmnSlice.actions
+export const { setDataPkmn, setDataSpecies, setLinksPkmn } = dataPkmnSlice.actions
 
 export default dataPkmnSlice.reducer

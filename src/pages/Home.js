@@ -21,20 +21,20 @@ function Home(props) {
     }),
       notification.info({
         icon: <div></div>,
-        message: <h3 style={{ color: "#aaaaaa", margin: 0, padding: 0, }}>User CheatSheet</h3>,
+        message: <h5 style={{ color: "#aaaaaa", margin: 0, padding: 0, }}>User CheatSheet</h5>,
         description:
           <div style={{ margin: 0, padding: 0 }}>
-            <p style={{ margin: 0, padding: 0, }}>Type p/... in search bar to search for a Pokemon.</p>
-            <p style={{ margin: 0, padding: 0, }}>Type t/... in search bar to search for a Type.</p>
-            <p style={{ margin: 0, padding: 0, }}>Type m/... in search bar to search for a Move.</p>
-            <p style={{ margin: 0, padding: 0, }}>Type i/... in search bar to search for a Item.</p>
-            <p style={{ margin: 0, padding: 0, }}>Type b/... in search bar to search for a Berry.</p>
-            <p style={{ margin: 0, padding: 0, }}>Type g/... in search bar to search for a Game.</p>
+            <p style={{ margin: 0, padding: 0, }}>p/... to search for a Pokemon.</p>
+            <p style={{ margin: 0, padding: 0, }}>t/... to search for a Type.</p>
+            <p style={{ margin: 0, padding: 0, }}>m/... to search for a Move.</p>
+            <p style={{ margin: 0, padding: 0, }}>i/... to search for a Item.</p>
           </div>
         ,
 
         style: {
+          margin: 0,
           paddingLeft: 0,
+          width: "100%",
           backgroundColor: "#242424",
           color: "#aaaaaa",
           border: "1px solid #e4e4e4",
@@ -70,22 +70,15 @@ function Home(props) {
               //On parcours les éléments de la liste
               for (let i = 0; i < children.length; i++) {
                 const element = children[i];
-                const child = element.childNodes[0]
 
                 if (i < value) {
                   element.style.visibility = 'visible'
                   element.style.width = '7em'
                   element.style.height = '7em'
-                  child.style.visibility = 'visible'
-                  child.style.width = '7em'
-                  child.style.height = '7em'
                 } else {
                   element.style.visibility = 'hidden'
                   element.style.width = '0em'
                   element.style.height = '0em'
-                  child.style.visibility = 'hidden'
-                  child.style.width = '0em'
-                  child.style.height = '0em'
                 }
               }
             }

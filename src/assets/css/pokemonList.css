@@ -10,6 +10,24 @@
 }
 
 .pkmnListItemImage {
+    pointer-events: all;
+    margin: 1%;
     width: 7em;
     height: 7em;
+}
+
+@keyframes hoverImageOn {
+    from {}
+
+    to {
+        border: .2em solid #aaa;
+        border-radius: 2em;
+    }
+}
+
+.pkmnListItemImage:hover {
+    cursor: pointer;
+    animation-name: hoverImageOn;
+    animation-duration: .1s;
+    animation-fill-mode: forwards;
 }

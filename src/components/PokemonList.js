@@ -2,7 +2,7 @@ import React from 'react';
 import { useEffect, useState } from 'react';
 import "../assets/css/pokemonList.css"
 import { LoadingOutlined } from '@ant-design/icons'
-import { NavLink } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 
 
 import { useSelector } from 'react-redux';
@@ -10,9 +10,14 @@ import { useSelector } from 'react-redux';
 const PokemonList = (props) => {
 
     const [data, setData] = useState([]);
+    const navigate = useNavigate()
+
+
 
     //REDUX
     const dataPkmn = useSelector((state) => state.dataPkmn.pkmn)
+
+
 
     useEffect(() => {
         //On parcours la data reçue des promesses pour construire la liste de Pokemon
@@ -30,20 +35,26 @@ const PokemonList = (props) => {
                 imgElement.alt = data.name;
                 imgElement.className = "pkmnListItemImage"
 
-                var navlink = document.createElement("a")
-                navlink.setAttribute("href", "/pokemon/" + data.id)
+                var id = data.id
+                const handleClick = () => {
+                    navigate("/pokemon/" + id);
+                }
+                imgElement.addEventListener('click', () => {
+                    handleClick()
+                })
+
                 if (data.id > props.nb) {
-                    navlink.style.visibility = 'hidden'
-                    navlink.style.height = '0'
-                    navlink.style.width = '0'
+                    imgElement.style.visibility = 'hidden'
+                    imgElement.style.height = '0'
+                    imgElement.style.width = '0'
+
                 } else {
-                    navlink.style.visibility = 'visible'
-                    navlink.style.height = '7em'
-                    navlink.style.width = '7em'
+                    imgElement.style.visibility = 'visible'
+                    imgElement.style.height = '7em'
+                    imgElement.style.width = '7em'
                 }
 
-                imgsList.appendChild(navlink)
-                navlink.appendChild(imgElement)
+                imgsList.appendChild(imgElement)
             })
             pkmnList.appendChild(imgsList)
         }
@@ -61,5 +72,7 @@ const PokemonList = (props) => {
         </div>
     );
 };
+
+
 
 export default PokemonList;;

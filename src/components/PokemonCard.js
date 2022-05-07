@@ -13,10 +13,11 @@ const PokemonCard = (props) => {
     const [pkmnId, setPkmnId] = useState();
     const [img, setImg] = useState(String);
     const [name, setName] = useState(String);
-    const [type1, setType1] = useState(String);
-    const [type2, setType2] = useState(String);
+    const [type1, setType1] = useState("");
+    const [type2, setType2] = useState("");
     const [data, setData] = useState();
     const [species, setSpecies] = useState();
+
     //REDUX
     const dataPkmn = useSelector((state) => state.dataPkmn.pkmn)
     const dataSpecies = useSelector((state) => state.dataPkmn.species)
@@ -25,7 +26,10 @@ const PokemonCard = (props) => {
 
     const handleClick = () => {
         if (pkmnId) {
-            navigate("/pokemon/" + pkmnId, { replace: true, });
+            setType1("")
+            setType2("")
+            navigate("/pokemon/" + pkmnId);
+
         }
     }
 
