@@ -26,6 +26,14 @@ const PokemonPage = (props) => {
     const [pkmnId, setPkmnId] = useState();
     const [img, setImg] = useState(String);
 
+    //Stats
+    const [attack, setAttack] = useState();
+    const [hp, setHp] = useState();
+    const [defense, setDefense] = useState();
+    const [specialAtk, setSpecialAtk] = useState();
+    const [specialDef, setSpecialDef] = useState();
+    const [speed, setSpeed] = useState();
+
     //Evolutions
     const [evolChain, setEvolChain] = useState();
     const [evolutions, setEvolutions] = useState(new Map());
@@ -52,6 +60,13 @@ const PokemonPage = (props) => {
             if (data.types.length > 1) {
                 setType2(data.types[1].type.name)
             }
+
+            setHp(data.stats[0].base_stat)
+            setAttack(data.stats[1].base_stat)
+            setDefense(data.stats[2].base_stat)
+            setSpecialAtk(data.stats[3].base_stat)
+            setSpecialDef(data.stats[4].base_stat)
+            setSpeed(data.stats[5].base_stat)
         }
     }, [data]);
 
@@ -205,17 +220,59 @@ const PokemonPage = (props) => {
                             <div className='pkmnPageCard'>
                                 <h4>{genera}</h4>
                             </div>
-                            <div className='pkmnPageDesc'>
-                                {
-                                    desc ?
-                                        <>
-                                            <h2>Description</h2>
-                                            <p>{desc}</p>
-                                        </>
-                                        :
-                                        <p>No description found</p>
-                                }
+                            <div className='pkmnInfos'>
+                                <div className='pkmnPageDesc'>
+                                    {desc ? <><h2>Description</h2><p>{desc}</p></> : <p>No description found</p>}
+                                </div>
+                                <div className="pkmnStats">
+                                    <h4>Stats de base : </h4>
+                                    <div className='bodyInfos'>
+                                        <div>
+                                            <h5>Taille : </h5>
+                                            <p>{(data.height / 10)}m</p>
+                                        </div>
+                                        <div>
+                                            <h5>Poids : </h5>
+                                            <p>{(data.weight / 10)}kg</p>
+                                        </div>
+                                    </div>
+                                    <div className='statInfos'>
+                                        <div>
+                                            <div>
+                                                <h5>Pv : </h5>
+                                                <p>{hp}</p>
+                                            </div>
+                                            <div>
+                                                <h5>Attaque : </h5>
+                                                <p>{attack}</p>
+                                            </div>
+                                            <div>
+                                                <h5>Défense : </h5>
+                                                <p>{defense}</p>
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <div>
+                                                <h5>Attaque-Spéciale : </h5>
+                                                <p>{specialAtk}</p>
+                                            </div>
+                                            <div>
+                                                <h5>Défense-Spéciale : </h5>
+                                                <p>{specialDef}</p>
+                                            </div>
+                                            <div>
+                                                <h5>Vitesse : </h5>
+                                                <p>{speed}</p>
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+
+                                </div>
                             </div>
+
+
                         </>
                         :
                         <div></div>

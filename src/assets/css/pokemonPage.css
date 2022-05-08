@@ -41,7 +41,60 @@
     margin: 5%;
 }
 
+
+.pkmnStats {
+    color: #aaaaaa;
+    margin: 2%;
+}
+
+.pkmnStats h4 {
+    color: #aaaaaa;
+    text-align: left;
+}
+
+.pkmnInfos {
+    display: flex;
+
+}
+
+.bodyInfos {
+    display: flex;
+
+}
+
+.bodyInfos div {
+    display: flex;
+    align-items: baseline;
+}
+
+.bodyInfos h5 {
+    color: #aaaaaa;
+    margin-left: 2em;
+    margin-right: .5em;
+}
+
+.bodyInfos p {
+    color: #aaaaaa;
+}
+
+.statInfos {
+    display: flex;
+    align-items: baseline;
+}
+
+.statInfos div div {
+    display: flex;
+}
+
+.statInfos h5 {
+    color: #aaaaaa;
+    margin-left: 2em;
+    margin-right: .5em;
+}
+
+
 .pkmnPageDesc {
+    width: 50%;
     color: #aaaaaa;
     display: block;
     text-align: left;
