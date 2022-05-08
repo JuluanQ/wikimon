@@ -16,13 +16,6 @@ const PokemonPage = (props) => {
 
     const location = useLocation();
 
-    //On new location reset some states
-    useEffect(() => {
-        setType1("")
-        setType2("")
-        setEvolutions(new Map())
-    }, [location]);
-
     const [data, setData] = useState();
     const [species, setSpecies] = useState([]);
     const [desc, setDesc] = useState("");
@@ -31,11 +24,17 @@ const PokemonPage = (props) => {
     const [type1, setType1] = useState("");
     const [type2, setType2] = useState("");
     const [pkmnId, setPkmnId] = useState();
-    const [moves, setMoves] = useState([]);
     const [img, setImg] = useState(String);
 
+    //Evolutions
     const [evolChain, setEvolChain] = useState();
     const [evolutions, setEvolutions] = useState(new Map());
+    const [evols, setEvols] = useState([]);
+    const [evol1, setEvol1] = useState();
+    const [evol2, setEvol2] = useState();
+    const [evol1Img, setEvol1Img] = useState("");
+    const [evol2Img, setEvol2Img] = useState("");
+
     //Redux
     const dataPkmn = useSelector((state) => state.dataPkmn.pkmn)
     const dataSpecies = useSelector((state) => state.dataPkmn.species)
@@ -58,11 +57,19 @@ const PokemonPage = (props) => {
 
     //Set all data
     useEffect(() => {
+        setType1("")
+        setType2("")
+        setEvolutions(new Map())
+        setEvols([])
+        setEvol1()
+        setEvol2()
+        setEvol1Img()
+        setEvol2Img()
         setPkmnId(param.id)
         var id = param.id
         setData(dataPkmn.payload[id - 1])
         setSpecies(dataSpecies.payload[id - 1])
-    }, [param]);
+    }, [location]);
 
     //Process data species
     useEffect(() => {
@@ -99,12 +106,37 @@ const PokemonPage = (props) => {
                         setEvolChain(data)
 
                         if (data.chain.evolves_to) {
+                            evolutions.set(data.chain.species.name, data.chain.species.url)
                             var evol = data.chain.evolves_to[0]
-                            do {
+                            while (evol.evolves_to) {
                                 evolutions.set(evol.species.name, evol.species.url)
+                                if (evol.evolves_to[0] == undefined) { break }
                                 evol = evol.evolves_to[0]
-                            } while (evol.evolves_to)
-                            evolutions.set(evol.species.name, evol.species.url)
+                            }
+                        }
+                        if (evolutions.size > 0) {
+                            evolutions.forEach((key, value) => {
+                                var str = key.replace("https://pokeapi.co/api/v2/pokemon-species/", "")
+                                str = str.replace("/", "")
+                                evols.push(dataSpecies.payload[str - 1])
+                            });
+                        }
+
+                        if (evols.length > 0) {
+                            if (evols.length == 3) {
+                                if (pkmnId == evols[0].id) {
+                                    setEvol1(dataPkmn.payload[evols[1].id - 1])
+                                    setEvol2(dataPkmn.payload[evols[2].id - 1])
+
+                                } else if (pkmnId == evols[1].id) {
+                                    setEvol1(dataPkmn.payload[evols[2].id - 1])
+                                }
+                            }
+                            if (evols.length == 2) {
+                                if (pkmnId == evols[0].id) {
+                                    setEvol1(dataPkmn.payload[evols[1].id - 1])
+                                }
+                            }
                         }
                     })
                     .catch(error => console.log(error))
@@ -112,6 +144,27 @@ const PokemonPage = (props) => {
 
         }
     }, [species])
+
+    useEffect(() => {
+        setEvol1Img()
+        setEvol2Img()
+        if (evol1 != undefined) {
+            if (evol1.sprites.other.dream_world.front_default != null) {
+                setEvol1Img(evol1.sprites.other.dream_world.front_default)
+            } else if (evol1.sprites.other.home.front_default != null) {
+                setEvol1Img(evol1.sprites.other.home.front_default)
+            }
+        }
+
+        if (evol2 != undefined) {
+            if (evol2.sprites.other.dream_world.front_default != null) {
+                setEvol2Img(evol2.sprites.other.dream_world.front_default)
+            } else if (evol2.sprites.other.home.front_default != null) {
+                setEvol2Img(evol2.sprites.other.home.front_default)
+            }
+        }
+
+    }, [(evol1 || evol2) && location]);
 
     return (
         <div className="App">
@@ -133,16 +186,21 @@ const PokemonPage = (props) => {
                             <div style={{ display: 'flex', }}>
 
                                 <img src={img} alt="pkmnImage" className='pkmnPageImage' />
-
-                                <div className="pkmnPagetypes">
-                                    {type1 ?
-                                        <Type type={type1} />
-                                        : <div className='emptyType'></div>}
-                                    {type2 ?
-                                        <Type type={type2} />
-                                        : <div className='emptyType'></div>}
+                                <div className='pkmn_ev_types'>
+                                    {evol1Img ? <h4>Evolutions : </h4> : <></>}
+                                    <div className='evolutions'>
+                                        {evol1Img ? <img src={evol1Img} alt="" className='evols_images' /> : <div></div>}
+                                        {evol2Img ? <img src={evol2Img} alt="" className='evols_images' /> : <div></div>}
+                                    </div>
+                                    <div className="pkmnPagetypes">
+                                        {type1 ?
+                                            <Type type={type1} />
+                                            : <div className='emptyType'></div>}
+                                        {type2 ?
+                                            <Type type={type2} />
+                                            : <div className='emptyType'></div>}
+                                    </div>
                                 </div>
-
                             </div>
                             <div className='pkmnPageCard'>
                                 <h4>{genera}</h4>

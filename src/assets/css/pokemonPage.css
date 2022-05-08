@@ -30,16 +30,15 @@
 }
 
 .pkmnPagetypes {
-    margin-left: 5%;
-    margin-top: 5%;
+
     display: flex;
-    justify-content: center;
     align-items: flex-end;
 }
 
 .pkmnPagetypes img {
     width: 10em;
-    padding-bottom: 5%;
+    padding: 5%;
+    margin: 5%;
 }
 
 .pkmnPageDesc {
@@ -51,4 +50,26 @@
 
 .pkmnPageDesc h2 {
     color: #aaaaaa;
+}
+
+.pkmn_ev_types {
+    margin-top: auto;
+    margin-left: 5%;
+    text-align: left;
+    align-items: flex-end;
+}
+
+.evolutions {
+    text-align: left;
+    display: flex;
+}
+
+.pkmn_ev_types h4 {
+    color: #aaaaaa;
+}
+
+.evols_images {
+    width: 7em;
+    height: 7em;
+    margin: 5%;
 }
