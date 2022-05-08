@@ -20,6 +20,7 @@ const PokemonPage = (props) => {
     useEffect(() => {
         setType1("")
         setType2("")
+        setEvolutions(new Map())
     }, [location]);
 
     const [data, setData] = useState();
@@ -33,6 +34,8 @@ const PokemonPage = (props) => {
     const [moves, setMoves] = useState([]);
     const [img, setImg] = useState(String);
 
+    const [evolChain, setEvolChain] = useState();
+    const [evolutions, setEvolutions] = useState(new Map());
     //Redux
     const dataPkmn = useSelector((state) => state.dataPkmn.pkmn)
     const dataSpecies = useSelector((state) => state.dataPkmn.species)
@@ -50,7 +53,6 @@ const PokemonPage = (props) => {
             if (data.types.length > 1) {
                 setType2(data.types[1].type.name)
             }
-            console.log("t1:", type1, " t2:", type2)
         }
     }, [data]);
 
@@ -89,6 +91,25 @@ const PokemonPage = (props) => {
                     }
                 })
             }
+
+            if (species.evolution_chain) {
+                fetch(species.evolution_chain.url)
+                    .then(response => response.json())
+                    .then(data => {
+                        setEvolChain(data)
+
+                        if (data.chain.evolves_to) {
+                            var evol = data.chain.evolves_to[0]
+                            do {
+                                evolutions.set(evol.species.name, evol.species.url)
+                                evol = evol.evolves_to[0]
+                            } while (evol.evolves_to)
+                            evolutions.set(evol.species.name, evol.species.url)
+                        }
+                    })
+                    .catch(error => console.log(error))
+            }
+
         }
     }, [species])
 
