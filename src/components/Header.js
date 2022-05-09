@@ -33,9 +33,69 @@ const menu = (
     />
 )
 
-
-
 const Header = () => {
+
+    const navigate = useNavigate()
+    function validateSearch(event) {
+        var text = event.target.value;
+        var what = ""
+        if (text.length > 2) {
+            what = text.substring(2);
+        }
+
+        switch (true) {
+            case text.startsWith("p/"):
+                console.log("Searching a Pokemon")
+                if (event.keyCode == 13) {
+                    event.target.value = ""
+                    navigate("/pokemon/" + what)
+                }
+                break;
+
+            case text.startsWith("t/"):
+                console.log("Searching a Type")
+                if (event.keyCode == 13) {
+                    event.target.value = ""
+                    navigate("/type/" + what)
+                }
+                break;
+            case text.startsWith("m/"):
+                console.log("Searching a Move")
+                if (event.keyCode == 13) {
+                    event.target.value = ""
+                    navigate("/move/" + what)
+                }
+                break;
+            case text.startsWith("i/"):
+                console.log("Searching an Item")
+                if (event.keyCode == 13) {
+                    event.target.value = ""
+                    navigate("/item/" + what)
+                }
+                break;
+            case text.startsWith("b/"):
+                console.log("Searching a Berry")
+                if (event.keyCode == 13) {
+                    event.target.value = ""
+                    navigate("/berry/" + what)
+                }
+                break;
+            case text.startsWith("g/"):
+                console.log("Searching a Game")
+                if (event.keyCode == 13) {
+                    event.target.value = ""
+                    navigate("/game/" + what)
+                }
+                break;
+            default:
+                break;
+        }
+    }
+
+    useEffect(() => {
+
+    }, []);
+
     return (
         <div className='Header'>
             <div className="headerBar">
@@ -50,6 +110,7 @@ const Header = () => {
                             id='searchInput'
                             className='searchBarInput'
                             placeholder='Search on Wikimon'
+                            onKeyDown={validateSearch}
                         />
                     </div>
                 </Dropdown>
@@ -58,37 +119,6 @@ const Header = () => {
     );
 };
 
-function validateSearch() {
-    var searchInput = document.getElementById("searchInput")
-    var text = searchInput.value;
-    var what = ""
-    if (text.length > 2) {
-        what = text.substring(2);
-    }
 
-    switch (true) {
-        case text.startsWith("p/"):
-            console.log("Searching a Pokemon")
-            return "/pokemon/2"
-
-        case text.startsWith("t/"):
-            console.log("Searching a Type")
-            break;
-        case text.startsWith("m/"):
-            console.log("Searching a Move")
-            break;
-        case text.startsWith("i/"):
-            console.log("Searching an Item")
-            break;
-        case text.startsWith("b/"):
-            console.log("Searching a Berry")
-            break;
-        case text.startsWith("g/"):
-            console.log("Searching a Game")
-            break;
-        default:
-            break;
-    }
-}
 
 export default Header;
