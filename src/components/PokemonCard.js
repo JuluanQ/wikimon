@@ -70,9 +70,9 @@ const PokemonCard = (props) => {
         <div className='card' >
             {
                 data ?
-                    <div className="pkmnCard" onClick={handleClick}>
+                    <div className="pkmnCard" >
                         <p className='pkmnName'>{name}</p>
-                        <img src={img} alt="pkmnImage" className='pkmnImage' />
+                        <img src={img} alt="pkmnImage" className='pkmnImage hvr-grow' onClick={handleClick} />
                         <div className='types'>
                             {type1 ?
                                 <Type type={type1} />

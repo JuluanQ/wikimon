@@ -2,7 +2,7 @@ import React from 'react';
 import { useEffect, useState } from 'react';
 import "../assets/css/pokemonList.css"
 import { LoadingOutlined } from '@ant-design/icons'
-import { NavLink, useNavigate } from 'react-router-dom';
+import { NavLink, useNavigate, useLocation } from 'react-router-dom';
 
 
 import { useSelector } from 'react-redux';
@@ -11,13 +11,14 @@ const PokemonList = (props) => {
 
     const [data, setData] = useState([]);
     const navigate = useNavigate()
-
-
+    const location = useLocation()
 
     //REDUX
     const dataPkmn = useSelector((state) => state.dataPkmn.pkmn)
 
-
+    useEffect(() => {
+        setData([])
+    }, [location]);
 
     useEffect(() => {
         //On parcours la data reçue des promesses pour construire la liste de Pokemon
@@ -33,7 +34,8 @@ const PokemonList = (props) => {
                     imgElement.src = data.sprites.other.home.front_default
                 }
                 imgElement.alt = data.name;
-                imgElement.className = "pkmnListItemImage"
+                imgElement.className = "pkmnListItemImage hvr-grow"
+                imgElement.style.cursor = 'pointer'
 
                 var id = data.id
                 const handleClick = () => {

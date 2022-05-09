@@ -21,30 +21,15 @@
     border-radius: .5em;
 }
 
-@keyframes cardHoverOn {
-    From {
-        filter: none;
-    }
-
-    To {
-
-        filter: grayscale(50%);
-    }
-}
-
-.card:hover {
-    cursor: pointer;
-    animation-name: cardHoverOn;
-    animation-duration: .5s;
-    animation-fill-mode: forwards;
-    animation-direction: alternate;
-}
-
 .pkmnImage {
     justify-content: center;
     align-items: center;
     width: 10em;
     height: 10em;
+}
+
+.pkmnImage:hover {
+    cursor: pointer;
 }
 
 .types {

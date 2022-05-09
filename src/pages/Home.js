@@ -62,7 +62,7 @@ function Home(props) {
         <div className="middlePane">
 
           {/* Définition du slider permettant d'afficher plus ou moins de pokemon */}
-          <Slider tooltipVisible tooltipPlacement='top' min={1} max={811} defaultValue={60} step={1} onChange={(value) => {
+          <Slider tooltipPlacement='top' min={1} max={811} defaultValue={60} step={1} onChange={(value) => {
             var pkmnList = document.getElementById("imgsList")
             var children = pkmnList.childNodes
             if (pkmnList.hasChildNodes) {

@@ -6,23 +6,24 @@ import Footer from '../components/Footer';
 import '../assets/css/App.css';
 import '../assets/css/pokemonPage.css'
 import PokemonCard from '../components/PokemonCard';
-import { useParams, useLocation } from 'react-router-dom';
+import { useParams, useLocation, useNavigate } from 'react-router-dom';
 
 import { useSelector } from 'react-redux';
-import Type from '../components/Type';
+import Type, { typesUrl, typesId } from '../components/Type';
+import { renderIntoDocument } from 'react-dom/test-utils';
 
 const PokemonPage = (props) => {
     const param = useParams()
-
     const location = useLocation();
+    const navigate = useNavigate();
 
     const [data, setData] = useState();
     const [species, setSpecies] = useState([]);
     const [desc, setDesc] = useState("");
     const [name, setName] = useState(String);
     const [genera, setGenera] = useState();
-    const [type1, setType1] = useState("");
-    const [type2, setType2] = useState("");
+    const [type1, setType1] = useState();
+    const [type2, setType2] = useState();
     const [pkmnId, setPkmnId] = useState();
     const [img, setImg] = useState(String);
 
@@ -40,12 +41,29 @@ const PokemonPage = (props) => {
     const [evols, setEvols] = useState([]);
     const [evol1, setEvol1] = useState();
     const [evol2, setEvol2] = useState();
-    const [evol1Img, setEvol1Img] = useState("");
-    const [evol2Img, setEvol2Img] = useState("");
+    const [evol1Img, setEvol1Img] = useState();
+    const [evol2Img, setEvol2Img] = useState();
+
+    //Moves
+    const [moves, setMoves] = useState([]);
+    const [movesData, setMovesData] = useState([]);
 
     //Redux
     const dataPkmn = useSelector((state) => state.dataPkmn.pkmn)
     const dataSpecies = useSelector((state) => state.dataPkmn.species)
+
+    const handleClickPkmn = (id) => {
+        if (id) {
+            navigate("/pokemon/" + id);
+        }
+    }
+
+
+    const handleClickMove = (id) => {
+        if (id) {
+            navigate("/move/" + id);
+        }
+    }
 
     //Process data pokemon
     useEffect(() => {
@@ -67,19 +85,74 @@ const PokemonPage = (props) => {
             setSpecialAtk(data.stats[3].base_stat)
             setSpecialDef(data.stats[4].base_stat)
             setSpeed(data.stats[5].base_stat)
+
+            setMoves(data.moves)
         }
     }, [data]);
 
+    //Moves
+    useEffect(() => {
+        if (moves.length > 0) {
+            var container = document.getElementById('pkmnAttacks')
+            container.innerHTML = ""
+            moves.forEach(item => {
+                fetch(item.move.url)
+                    .then(response => response.json())
+                    .then(data => {
+
+                        var element = document.createElement('div')
+                        element.setAttribute("class", "move hvr-grow")
+                        var nameP = document.createElement('p')
+                        data.names.forEach(nameElement => {
+                            if (nameElement.language.name == "fr") {
+                                nameP.textContent = nameElement.name
+
+                            }
+                        })
+                        var nameImg = document.createElement('div')
+                        nameImg.setAttribute('class', 'nameImg')
+                        nameImg.appendChild(nameP)
+
+                        var typeImg = document.createElement('img')
+                        typeImg.src = typesUrl[data.type.name]
+
+
+                        var ppTxt = document.createElement('p')
+                        ppTxt.textContent = "Pp : " + data.pp
+
+                        var powerTxt = document.createElement('p')
+                        powerTxt.textContent = "Puissance : " + data.power
+
+                        var accuracyTxt = document.createElement('p')
+                        accuracyTxt.textContent = "Précision : " + data.accuracy
+
+                        var divContainer = document.createElement("div")
+                        divContainer.appendChild(ppTxt)
+                        //divContainer.appendChild(powerTxt)
+                        //divContainer.appendChild(accuracyTxt)
+                        divContainer.appendChild(typeImg)
+                        element.appendChild(nameImg)
+                        element.appendChild(divContainer)
+                        element.addEventListener('click', () => { handleClickMove(data.id) })
+                        container.appendChild(element)
+
+                    })
+                    .catch(error => console.log(error))
+            })
+        }
+    }, [moves]);
+
     //Set all data
     useEffect(() => {
-        setType1("")
-        setType2("")
+        setType1()
+        setType2()
         setEvolutions(new Map())
         setEvols([])
         setEvol1()
         setEvol2()
         setEvol1Img()
         setEvol2Img()
+
         setPkmnId(param.id)
         var id = param.id
         setData(dataPkmn.payload[id - 1])
@@ -123,11 +196,14 @@ const PokemonPage = (props) => {
                         if (data.chain.evolves_to) {
                             evolutions.set(data.chain.species.name, data.chain.species.url)
                             var evol = data.chain.evolves_to[0]
-                            while (evol.evolves_to) {
-                                evolutions.set(evol.species.name, evol.species.url)
-                                if (evol.evolves_to[0] == undefined) { break }
-                                evol = evol.evolves_to[0]
+                            if (evol) {
+                                while (evol.evolves_to) {
+                                    evolutions.set(evol.species.name, evol.species.url)
+                                    if (evol.evolves_to[0] == undefined) { break }
+                                    evol = evol.evolves_to[0]
+                                }
                             }
+
                         }
                         if (evolutions.size > 0) {
                             evolutions.forEach((key, value) => {
@@ -141,10 +217,15 @@ const PokemonPage = (props) => {
                             if (evols.length == 3) {
                                 if (pkmnId == evols[0].id) {
                                     setEvol1(dataPkmn.payload[evols[1].id - 1])
-                                    setEvol2(dataPkmn.payload[evols[2].id - 1])
+                                    if (evols[2]) {
+                                        setEvol2(dataPkmn.payload[evols[2].id - 1])
+                                    }
+
 
                                 } else if (pkmnId == evols[1].id) {
-                                    setEvol1(dataPkmn.payload[evols[2].id - 1])
+                                    if (evols[2]) {
+                                        setEvol1(dataPkmn.payload[evols[2].id - 1])
+                                    }
                                 }
                             }
                             if (evols.length == 2) {
@@ -197,25 +278,25 @@ const PokemonPage = (props) => {
                                 <h1 className='titleName'>{name}</h1>
                                 <h1 className='titleId'>{pkmnId}</h1>
                             </div>
-
-                            <div style={{ display: 'flex', }}>
-
-                                <img src={img} alt="pkmnImage" className='pkmnPageImage' />
+                            <div class="pkmn_ev_types_atks" style={{ display: 'flex', }}>
+                                <img src={img} alt="pkmnImage" className='pkmnPageImage hvr-grow' onClick={() => handleClickPkmn(pkmnId)} />
                                 <div className='pkmn_ev_types'>
-                                    {evol1Img ? <h4>Evolutions : </h4> : <></>}
                                     <div className='evolutions'>
-                                        {evol1Img ? <img src={evol1Img} alt="" className='evols_images' /> : <div></div>}
-                                        {evol2Img ? <img src={evol2Img} alt="" className='evols_images' /> : <div></div>}
+                                        <div>
+                                            {evol1Img ? <h4>Evolutions : </h4> : <></>}
+                                        </div>
+                                        <div className="evolutionsImg">
+                                            {evol1Img ? <img src={evol1Img} alt="" className='evols_images hvr-grow' onClick={() => handleClickPkmn(evol1.id)} /> : <div></div>}
+                                            {evol2Img ? <img src={evol2Img} alt="" className='evols_images hvr-grow' onClick={() => handleClickPkmn(evol2.id)} /> : <div></div>}
+                                        </div>
                                     </div>
                                     <div className="pkmnPagetypes">
-                                        {type1 ?
-                                            <Type type={type1} />
-                                            : <div className='emptyType'></div>}
-                                        {type2 ?
-                                            <Type type={type2} />
-                                            : <div className='emptyType'></div>}
+                                        {type1 ? <div className='hvr-grow'><Type type={type1} /></div> : <></>}
+                                        {type2 ? <div className='hvr-grow'><Type type={type2} /></div> : <></>}
                                     </div>
+
                                 </div>
+                                <div id="pkmnAttacks"></div>
                             </div>
                             <div className='pkmnPageCard'>
                                 <h4>{genera}</h4>
@@ -223,59 +304,30 @@ const PokemonPage = (props) => {
                             <div className='pkmnInfos'>
                                 <div className='pkmnPageDesc'>
                                     {desc ? <><h2>Description</h2><p>{desc}</p></> : <p>No description found</p>}
+
                                 </div>
                                 <div className="pkmnStats">
                                     <h4>Stats de base : </h4>
                                     <div className='bodyInfos'>
-                                        <div>
-                                            <h5>Taille : </h5>
-                                            <p>{(data.height / 10)}m</p>
-                                        </div>
-                                        <div>
-                                            <h5>Poids : </h5>
-                                            <p>{(data.weight / 10)}kg</p>
-                                        </div>
+                                        <div><h5>Taille : </h5><p>{(data.height / 10)}m</p></div>
+                                        <div><h5>Poids : </h5><p>{(data.weight / 10)}kg</p></div>
                                     </div>
                                     <div className='statInfos'>
                                         <div>
-                                            <div>
-                                                <h5>Pv : </h5>
-                                                <p>{hp}</p>
-                                            </div>
-                                            <div>
-                                                <h5>Attaque : </h5>
-                                                <p>{attack}</p>
-                                            </div>
-                                            <div>
-                                                <h5>Défense : </h5>
-                                                <p>{defense}</p>
-                                            </div>
+                                            <div><h5>Pv : </h5><p>{hp}</p></div>
+                                            <div><h5>Attaque : </h5><p>{attack}</p></div>
+                                            <div><h5>Défense : </h5><p>{defense}</p></div>
                                         </div>
                                         <div>
-                                            <div>
-                                                <h5>Attaque-Spéciale : </h5>
-                                                <p>{specialAtk}</p>
-                                            </div>
-                                            <div>
-                                                <h5>Défense-Spéciale : </h5>
-                                                <p>{specialDef}</p>
-                                            </div>
-                                            <div>
-                                                <h5>Vitesse : </h5>
-                                                <p>{speed}</p>
-                                            </div>
+                                            <div><h5>Attaque-Spé : </h5><p>{specialAtk}</p></div>
+                                            <div><h5>Défense-Spé : </h5><p>{specialDef}</p></div>
+                                            <div><h5>Vitesse : </h5><p>{speed}</p></div>
                                         </div>
-
                                     </div>
-
 
                                 </div>
                             </div>
-
-
-                        </>
-                        :
-                        <div></div>
+                        </> : <></>
                     }
                 </div>
                 <div className="rightPane">
