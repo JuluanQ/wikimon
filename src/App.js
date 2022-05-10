@@ -7,7 +7,7 @@ import PokemonPage from './pages/PokemonPage.js';
 
 //REDUX
 import { useDispatch } from 'react-redux';
-import { setDataPkmn, setDataSpecies, setLinksPkmn } from './dataPkmnSlice.js';
+import { setDataPkmn, setDataSpecies, setLinksPkmn, setSpeciesNameId } from './dataPkmnSlice.js';
 
 const App = () => {
 
@@ -72,11 +72,21 @@ const App = () => {
                         .filter(x => x.status === "fulfilled")
                         .map(x => x.value)
                     setSpeciesData(successes)
+                    var tmp = new Map()
+                    successes.forEach(item =>{
+                        item.names.forEach(element=>{
+                            if (element.language.name == "fr") {
+                                tmp.put(item.id, element.name)  
+                            }
+                        })
+                    })
                     if (speciesData) {
                         setProgress(100)
+                        dispatch(setDataSpecies(successes))
+                        dispatch(setSpeciesNameId(tmp))
                         setDone(true)
                     }
-                    dispatch(setDataSpecies(successes))
+                    
                 })
         }
     }, [pkmnData]);

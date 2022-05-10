@@ -5,6 +5,7 @@ import { Menu, Dropdown } from 'antd';
 
 import '../assets/css/App.css'
 import { Navigate, NavLink, useNavigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 
 const style = {
     backgroundColor: "#242424",
@@ -36,6 +37,10 @@ const menu = (
 const Header = () => {
 
     const navigate = useNavigate()
+    const speciesNameId = useSelector((state) => state.dataPkmn.speciesNameId)
+    const [species, setSpecies] = useState();
+
+
     function validateSearch(event) {
         var text = event.target.value;
         var what = ""
@@ -46,7 +51,16 @@ const Header = () => {
         switch (true) {
             case text.startsWith("p/"):
                 console.log("Searching a Pokemon")
-                if (event.keyCode == 13) {
+
+                var searchPossibilities = []
+                speciesNameId.forEach((key, value) => {
+                    if (value.includes(what)) {
+                        searchPossibilities.push(key)
+                    }
+                })
+                console.log(searchPossibilities)
+
+                if (event.keyCode == 13 && searchPossibilities.length == 1) {
                     event.target.value = ""
                     navigate("/pokemon/" + what)
                 }
@@ -93,8 +107,8 @@ const Header = () => {
     }
 
     useEffect(() => {
-
-    }, []);
+        setSpecies(dataSpecies.payload)
+    }, [dataSpecies]);
 
     return (
         <div className='Header'>
