@@ -36,6 +36,11 @@ body {
   justify-content: center;
 }
 
+.searchBar form {
+  display: flex;
+  width: -moz-available;
+}
+
 .searchBar {
   display: inline-flex;
   background-color: #242424;

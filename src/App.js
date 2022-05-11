@@ -73,20 +73,20 @@ const App = () => {
                         .map(x => x.value)
                     setSpeciesData(successes)
                     var tmp = new Map()
-                    successes.forEach(item =>{
-                        item.names.forEach(element=>{
+                    successes.forEach(item => {
+                        item.names.forEach(element => {
                             if (element.language.name == "fr") {
-                                tmp.put(item.id, element.name)  
+                                tmp.set(item.id, element.name)
                             }
                         })
                     })
                     if (speciesData) {
-                        setProgress(100)
+
                         dispatch(setDataSpecies(successes))
                         dispatch(setSpeciesNameId(tmp))
                         setDone(true)
                     }
-                    
+
                 })
         }
     }, [pkmnData]);
