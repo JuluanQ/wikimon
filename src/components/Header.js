@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import 'antd/dist/antd.css'
-import { SearchOutlined, HomeOutlined } from '@ant-design/icons'
-import { Menu, Dropdown } from 'antd';
+import { SearchOutlined, HomeOutlined, UserOutlined } from '@ant-design/icons'
+import { Menu, Dropdown, notification } from 'antd';
 
 import '../assets/css/App.css'
-import { Navigate, NavLink, useNavigate } from 'react-router-dom';
+import { Navigate, NavLink, useNavigate, useLocation } from 'react-router-dom';
 import { useSelector } from 'react-redux';
+import { render } from '@testing-library/react';
 
 const style = {
     backgroundColor: "#242424",
@@ -23,6 +24,10 @@ const homelogoStyle = {
     position: "absolute",
     left: "3em",
 }
+
+
+
+/*
 const menu = (
     <Menu style={style} theme="dark"
         items={[
@@ -33,82 +38,91 @@ const menu = (
         ]}
     />
 )
+*/
+
+/* Permet de rechercher sans les accents */
+const rules = {
+    a: "àáâãäå",
+    A: "ÀÁÂ",
+    e: "èéêë",
+    E: "ÈÉÊË",
+    i: "ìíîï",
+    I: "ÌÍÎÏ",
+    o: "òóôõöø",
+    O: "ÒÓÔÕÖØ",
+    u: "ùúûü",
+    U: "ÙÚÛÜ",
+    y: "ÿ",
+    c: "ç",
+    C: "Ç",
+    n: "ñ",
+    N: "Ñ"
+};
+function getJSONKey(key) {
+    for (let acc in rules) {
+        if (rules[acc].indexOf(key) > -1) { return acc }
+    }
+}
+function replaceSpec(Texte) {
+    let regstring = ""
+    for (let acc in rules) {
+        regstring += rules[acc]
+    }
+    let reg = new RegExp("[" + regstring + "]", "g")
+    return Texte.replace(reg, function (t) { return getJSONKey(t) });
+}
 
 const Header = () => {
 
+    /* search dropdown build */
+    const [searchMap, setSearchMap] = useState(new Map());
+
+    const menus = Object.entries(searchMap).map((key) => {
+        return (<Menu.Item key={key[0]} icon={<UserOutlined />}>{key[1].name}</Menu.Item>)
+    });
+    const menu = () => {
+        return (<Menu onClick={handleMenuClick}>{menus}</Menu>)
+    }
+    const handleMenuClick = () => {
+    }
+
     const navigate = useNavigate()
-    const speciesNameId = useSelector((state) => state.dataPkmn.speciesNameId)
+    const location = useLocation()
+    const speciesNameId = useSelector((state) => state.dataPkmn.speciesNameId.payload)
     const [species, setSpecies] = useState();
+    const [search, setSearch] = useState("");
+    const [isValid, setIsValid] = useState(false);
 
-
-    function validateSearch(event) {
-        var text = event.target.value;
-        var what = ""
-        if (text.length > 2) {
-            what = text.substring(2);
-        }
-
+    const handleSearchOnChange = (event) => {
+        var text = event.target.value
+        setSearchMap(new Map())
         switch (true) {
             case text.startsWith("p/"):
-                console.log("Searching a Pokemon")
+                text = text.substring(2)
+                let possibilities = []
+                speciesNameId.forEach((value, key) => {
+                    let tmp = replaceSpec(value.toLowerCase())
+                    if (tmp.includes(text)) {
+                        possibilities.push(key)
+                        searchMap.set(key, value)
 
-                var searchPossibilities = []
-                speciesNameId.forEach((key, value) => {
-                    if (value.includes(what)) {
-                        searchPossibilities.push(key)
                     }
-                })
-                console.log(searchPossibilities)
-
-                if (event.keyCode == 13 && searchPossibilities.length == 1) {
-                    event.target.value = ""
-                    navigate("/pokemon/" + what)
+                });
+                console.log(searchMap)
+                if (possibilities.length == 1) {
+                    setSearch("/pokemon/" + possibilities[0])
                 }
                 break;
 
-            case text.startsWith("t/"):
-                console.log("Searching a Type")
-                if (event.keyCode == 13) {
-                    event.target.value = ""
-                    navigate("/type/" + what)
-                }
-                break;
-            case text.startsWith("m/"):
-                console.log("Searching a Move")
-                if (event.keyCode == 13) {
-                    event.target.value = ""
-                    navigate("/move/" + what)
-                }
-                break;
-            case text.startsWith("i/"):
-                console.log("Searching an Item")
-                if (event.keyCode == 13) {
-                    event.target.value = ""
-                    navigate("/item/" + what)
-                }
-                break;
-            case text.startsWith("b/"):
-                console.log("Searching a Berry")
-                if (event.keyCode == 13) {
-                    event.target.value = ""
-                    navigate("/berry/" + what)
-                }
-                break;
-            case text.startsWith("g/"):
-                console.log("Searching a Game")
-                if (event.keyCode == 13) {
-                    event.target.value = ""
-                    navigate("/game/" + what)
-                }
-                break;
             default:
                 break;
         }
     }
 
     useEffect(() => {
-        setSpecies(dataSpecies.payload)
-    }, [dataSpecies]);
+        setSearch("")
+    }, [location]);
+
 
     return (
         <div className='Header'>
@@ -120,12 +134,15 @@ const Header = () => {
                 <Dropdown overlay={menu} trigger={['click']} overlayStyle={style}>
                     <div className="searchBar">
                         <SearchOutlined className='searchLogo' />
-                        <input type="search"
-                            id='searchInput'
-                            className='searchBarInput'
-                            placeholder='Search on Wikimon'
-                            onKeyDown={validateSearch}
-                        />
+                        <form onSubmit={() => { navigate(search, { replace: true }) }} autoComplete="off">
+                            <input type="search"
+                                id='searchInput'
+                                className='searchBarInput'
+                                placeholder='Search on Wikimon'
+                                onChange={handleSearchOnChange}
+                            />
+                        </form>
+
                     </div>
                 </Dropdown>
             </div>
