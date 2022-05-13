@@ -11,6 +11,24 @@ import { Slider, notification } from 'antd';
 
 import { useSelector } from 'react-redux';
 
+// A DEPLACER SI TU VEUX
+
+function getUnixDate (date = new Date()) {
+  const DAY = 1000 * 60 * 60 * 24;
+  return Math.floor(date.getTime() / DAY);
+}
+
+const actualDay = getUnixDate();
+
+function getTypeId () {
+  return actualDay % 18 + 1;
+}
+
+function getPokemonId () {
+  return actualDay % 811 + 1;
+}
+
+// 
 
 function Home(props) {
   const openNotification = placement => {
@@ -87,7 +105,11 @@ function Home(props) {
           {dataPkmn ? < PokemonList nb={60} /> : <div></div>}
         </div>
         <div className="rightPane">
-
+  {/* On veut afficher un Pokemon du jour au hasard pendant 24h 
+  {dataPkmn && dataSpecies ? <PokemonDuJour id={getPokemonId()} /> : <div></div>} */}
+       
+       {/* On veut afficher un type du jour pendant 24h 
+      {<TypeDuJour id={getTypeId()} />} */}
         </div>
       </div>
       <Footer />
