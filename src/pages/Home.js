@@ -53,7 +53,7 @@ function Home(props) {
 
   return (
     <div className="App">
-      <Header nav={props.nav} />
+      <Header />
       <div className="Panes">
         <div className="leftPane">
           {/* //Pokemon Aléatoire */}
