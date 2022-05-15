@@ -5,6 +5,8 @@ import Header from '../components/Header';
 import PokemonCard from '../components/PokemonCard';
 import Footer from '../components/Footer';
 import PokemonList from '../components/PokemonList';
+import PokemonDuJour from '../components/PokemonDuJour';
+import TypeDuJour from '../components/TypeDuJour';
 
 import 'antd/dist/antd.css'
 import { Slider, notification } from 'antd';
@@ -105,11 +107,11 @@ function Home(props) {
           {dataPkmn ? < PokemonList nb={60} /> : <div></div>}
         </div>
         <div className="rightPane">
-  {/* On veut afficher un Pokemon du jour au hasard pendant 24h 
-  {dataPkmn && dataSpecies ? <PokemonDuJour id={getPokemonId()} /> : <div></div>} */}
+  {/* On veut afficher un Pokemon du jour au hasard pendant 24h */}
+  {dataPkmn && dataSpecies ? <PokemonDuJour id={getPokemonId()} /> : <div></div>} 
        
-       {/* On veut afficher un type du jour pendant 24h 
-      {<TypeDuJour id={getTypeId()} />} */}
+       {/* On veut afficher un type du jour pendant 24h */}
+      {<TypeDuJour id={getTypeId()} />} 
         </div>
       </div>
       <Footer />
