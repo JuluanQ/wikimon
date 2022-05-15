@@ -8,6 +8,7 @@ import PokemonPage from './pages/PokemonPage.js';
 //REDUX
 import { useDispatch } from 'react-redux';
 import { setDataPkmn, setDataSpecies, setLinksPkmn, setSpeciesNameId } from './dataPkmnSlice.js';
+import TypePage from './pages/TypePage.js';
 
 const App = () => {
 
@@ -100,6 +101,7 @@ const App = () => {
                         <Route path="/loading" element={<Loading progress={progress} />}></Route>
                         <Route name="home" path="/" element={<Home />} > </Route>
                         <Route name="pokemon" path="/pokemon/:id" element={<PokemonPage />}></Route>
+                        <Route name="type" path="/type/:id" element={<TypePage />}></Route>
 
                         <Route path="*" element={<Home />}> </Route>
                     </Routes >
