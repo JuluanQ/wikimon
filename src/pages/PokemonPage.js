@@ -10,7 +10,6 @@ import { useParams, useLocation, useNavigate } from 'react-router-dom';
 
 import { useSelector } from 'react-redux';
 import Type, { typesUrl, typesId } from '../components/Type';
-import { renderIntoDocument } from 'react-dom/test-utils';
 
 const PokemonPage = (props) => {
     const param = useParams()
