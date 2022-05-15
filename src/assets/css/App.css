@@ -159,10 +159,28 @@ body {
 */
 .rightPane {
   display: flex;
+  flex-direction: column;
 
   width: 20%;
 
   background-color: black;
+
+  justify-content: center;
+}
+
+.rightPane .card {
+  align-self: center;
+
+  width: 80%;
+}
+
+.titleText {
+  color: #e4e4e4;
+  font-size: large;
+}
+
+#noCursor {
+  cursor: default;
 }
 
 /*
