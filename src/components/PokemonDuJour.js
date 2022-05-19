@@ -72,7 +72,7 @@ const PokemonDuJour = (props) => {
                     <div className="pkmnCard" onClick={handleClick}>
                         <p className='titleText'>Pokémon du jour : </p>
                         <p className='pkmnName'>{name}</p>
-                        <img src={img} alt="pkmnImage" className='pkmnImage' />
+                        <img src={img} alt="pkmnImage" className='pkmnImage hvr-grow' />
                     </div>
                     :
                     <div></div>
