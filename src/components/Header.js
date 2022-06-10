@@ -105,7 +105,6 @@ const Header = () => {
                     if (tmp.includes(text)) {
                         possibilities.push(key)
                         searchMap.set(key, value)
-
                     }
                 });
                 console.log(searchMap)
@@ -121,6 +120,7 @@ const Header = () => {
 
     useEffect(() => {
         setSearch("")
+        document.getElementById("searchInput").value = ""
     }, [location]);
 
 
@@ -134,7 +134,7 @@ const Header = () => {
                 <Dropdown overlay={menu} trigger={['click']} overlayStyle={style}>
                     <div className="searchBar">
                         <SearchOutlined className='searchLogo' />
-                        <form onSubmit={() => { navigate(search, { replace: true }) }} autoComplete="off">
+                        <form onSubmit={() => { navigate(search) }} autoComplete="off" action="javascript:void(0);">
                             <input type="search"
                                 id='searchInput'
                                 className='searchBarInput'
