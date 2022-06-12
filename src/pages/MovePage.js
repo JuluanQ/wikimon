@@ -27,6 +27,15 @@ const MovePage = (props) => {
         }
     }
 
+    //Process data pokemon
+    useEffect(() => {
+        if (data) {
+   
+            setMoves(data.moves)
+        }
+    }, [data]);
+
+//Moves
     useEffect(() => {
         if (moves.length > 0) {
             var container = document.getElementById('pkmnAttacks')
