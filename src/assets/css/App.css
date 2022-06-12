@@ -50,7 +50,7 @@ body {
   border: 1px solid #3d3d3d;
   border-radius: 1em;
 
-  width: 35%;
+  width: 35% !important;
   margin-top: .5%;
   margin-bottom: .5%;
 
@@ -81,15 +81,35 @@ body {
 }
 
 .searchBarInput {
-  background-color: #242424;
-  color: #aaaaaa;
+  background-color: #242424 !important;
+  color: #aaaaaa !important;
 
-  font-size: 15px;
-  border-radius: 1em;
+  font-size: 15px !important;
+  border-radius: 1em !important;
 
-  height: 30px;
-  width: 100%;
-  border: none;
+  height: 30px !important;
+  width: 100% !important;
+  border: none !important;
+}
+
+.ant-select-customize-input {
+  width: inherit;
+}
+
+.ant-input:focus {
+  box-shadow: none !important;
+}
+
+.autoCompletePkmn {
+  background-color: #242424 !important;
+}
+
+.autoCompletePkmn .ant-select-item {
+  color: #fff !important;
+}
+
+.autoCompletePkmn .ant-select-item :hover {
+  color: #1a1a1a;
 }
 
 /* 
