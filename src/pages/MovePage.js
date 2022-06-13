@@ -36,8 +36,40 @@ const MovePage = (props) => {
     //Moves
     const [moves, setMoves] = useState([]);
     const [movesData, setMovesData] = useState([]);
+    const [moveData, setMoveData] = useState();
+
+    //Redux
+    const dataPkmn = useSelector((state) => state.dataPkmn.pkmn)
+    const dataSpecies = useSelector((state) => state.dataPkmn.species)
+
+useEffect(() => {
+    if (param) {
+        fetch("https://pokeapi.co/api/v2/move/" + param.id)
+            .then(response => response.json())
+            .then(data => {
+                setTypeData(data)
+
+            })
+            .catch(error => console.log(error))
+    }
+}, [param]);
 
 
+useEffect(() => {
+    if (pokemons) {
+        if (pokemonsData) {
+            pokemons.forEach(item => {
+                fetch(item.pokemon.url)
+                    .then(response => response.json())
+                    .then(data => {
+                        pokemonsData.push(data)
+                    })
+                    .catch(error => console.log(error))
+            })
+        }
+
+    }
+}, [pokemons]);
 
     const handleClickMove = (id) => {
         if (id) {
