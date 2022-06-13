@@ -29,8 +29,18 @@ const PokemonDuJour = (props) => {
             setType1("")
             setType2("")
             navigate("/pokemon/" + pkmnId);
-
         }
+    }
+
+    function getUnixDate(date = new Date()) {
+        const DAY = 1000 * 60 * 60 * 24;
+        return Math.floor(date.getTime() / DAY);
+    }
+
+    const actualDay = getUnixDate();
+
+    function getPokemonId() {
+        return actualDay % 811 + 1;
     }
 
     useEffect(() => {
@@ -55,13 +65,13 @@ const PokemonDuJour = (props) => {
     }, [data && species]);
     useEffect(() => {
         if (dataPkmn) {
-            setData(dataPkmn.payload[props.id - 1])
+            setData(dataPkmn.payload[getPokemonId() - 1])
         }
     }, [dataPkmn && param])
 
     useEffect(() => {
         if (dataSpecies) {
-            setSpecies(dataSpecies.payload[props.id - 1])
+            setSpecies(dataSpecies.payload[getPokemonId() - 1])
         }
     }, [dataSpecies && param]);
 
@@ -75,7 +85,7 @@ const PokemonDuJour = (props) => {
                         <img src={img} alt="pkmnImage" className='pkmnImage hvr-grow' />
                     </div>
                     :
-                    <div></div>
+                    <></>
             }
 
         </div>
