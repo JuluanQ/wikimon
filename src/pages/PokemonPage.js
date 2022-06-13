@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 
 import Header from '../components/Header';
 import Footer from '../components/Footer';
+import TypeDuJour from '../components/TypeDuJour';
+import PokemonDuJour from '../components/PokemonDuJour';
 
 import '../assets/css/App.css';
 import '../assets/css/pokemonPage.css'
@@ -10,6 +12,22 @@ import { useParams, useLocation, useNavigate } from 'react-router-dom';
 
 import { useSelector } from 'react-redux';
 import Type, { typesUrl, typesId } from '../components/Type';
+
+//Pokemon et type du jour
+function getUnixDate (date = new Date()) {
+    const DAY = 1000 * 60 * 60 * 24;
+    return Math.floor(date.getTime() / DAY);
+  }
+  
+  const actualDay = getUnixDate();
+  
+  function getTypeId () {
+    return actualDay % 18 + 1;
+  }
+  
+  function getPokemonId () {
+    return actualDay % 811 + 1;
+  }
 
 const PokemonPage = (props) => {
     const param = useParams()
@@ -330,7 +348,11 @@ const PokemonPage = (props) => {
                     }
                 </div>
                 <div className="rightPane">
-
+ {/* On veut afficher un Pokemon du jour au hasard pendant 24h */}
+ {dataPkmn && dataSpecies ? <PokemonDuJour id={getPokemonId()} /> : <div></div>} 
+       
+ {/* On veut afficher un type du jour pendant 24h */}
+  {<TypeDuJour id={getTypeId()} />} 
                 </div>
             </div>
             <Footer />
