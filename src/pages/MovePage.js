@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 
 import Header from '../components/Header';
 import Footer from '../components/Footer';
+import PokemonCard from '../components/PokemonCard';
 
 import '../assets/css/App.css';
 import { useParams, useLocation, useNavigate } from 'react-router-dom';
@@ -30,12 +31,12 @@ const MovePage = (props) => {
     //Process data pokemon
     useEffect(() => {
         if (data) {
-   
+
             setMoves(data.moves)
         }
     }, [data]);
 
-//Moves
+    //Moves
     useEffect(() => {
         if (moves.length > 0) {
             var container = document.getElementById('pkmnAttacks')
@@ -54,7 +55,7 @@ const MovePage = (props) => {
 
                             }
                         })
-                     
+
 
                         var ppTxt = document.createElement('p')
                         ppTxt.textContent = "Pp : " + data.pp
@@ -91,11 +92,11 @@ const MovePage = (props) => {
                 </div>
                 <div className="rightPane">
 
-</div>
-</div>
-<Footer />
-</div>
-);
+                </div>
+            </div>
+            <Footer />
+        </div>
+    );
 };
 
 export default MovePage;

@@ -9,6 +9,7 @@ import PokemonPage from './pages/PokemonPage.js';
 import { useDispatch } from 'react-redux';
 import { setDataPkmn, setDataSpecies, setLinksPkmn, setSpeciesNameId } from './dataPkmnSlice.js';
 import TypePage from './pages/TypePage.js';
+import MovePage from './pages/MovePage.js';
 
 const App = () => {
 
@@ -102,6 +103,7 @@ const App = () => {
                         <Route name="home" path="/" element={<Home />} > </Route>
                         <Route name="pokemon" path="/pokemon/:id" element={<PokemonPage />}></Route>
                         <Route name="type" path="/type/:id" element={<TypePage />}></Route>
+                        <Route name="move" path="/move/:id" element={<MovePage />}></Route>
 
                         <Route path="*" element={<Home />}> </Route>
                     </Routes >

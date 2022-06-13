@@ -1,31 +1,24 @@
 import React from 'react';
 import { useEffect, useState } from 'react';
 import "../assets/css/pokemonList.css"
-import { LoadingOutlined } from '@ant-design/icons'
-import { NavLink, useNavigate, useLocation } from 'react-router-dom';
-
-
-import { useSelector } from 'react-redux';
+import { useNavigate, useLocation } from 'react-router-dom';
 
 const PokemonList = (props) => {
 
-    const [data, setData] = useState([]);
+    const [data, setData] = useState();
     const navigate = useNavigate()
     const location = useLocation()
 
-    //REDUX
-    const dataPkmn = useSelector((state) => state.dataPkmn.pkmn)
-
     useEffect(() => {
-        setData([])
+        setData(props.data)
     }, [location]);
 
     useEffect(() => {
         //On parcours la data reçue des promesses pour construire la liste de Pokemon
-        if (data !== []) {
-            const pkmnList = document.getElementById("PokemonList")
-            const imgsList = document.getElementById("imgsList")
 
+        const pkmnList = document.getElementById("PokemonList")
+        const imgsList = document.getElementById("imgsList")
+        if (data) {
             data.forEach(data => {
                 var imgElement = document.createElement("img")
                 if (data.sprites.other.dream_world.front_default) {
@@ -61,12 +54,6 @@ const PokemonList = (props) => {
             pkmnList.appendChild(imgsList)
         }
     }, [data]);
-
-    useEffect(() => {
-        if (dataPkmn.payload != []) {
-            setData(dataPkmn.payload)
-        }
-    }, [dataPkmn])
 
     return (
         <div id='PokemonList'>

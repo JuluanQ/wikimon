@@ -15,18 +15,18 @@ import { useSelector } from 'react-redux';
 
 // A DEPLACER SI TU VEUX
 
-function getUnixDate (date = new Date()) {
+function getUnixDate(date = new Date()) {
   const DAY = 1000 * 60 * 60 * 24;
   return Math.floor(date.getTime() / DAY);
 }
 
 const actualDay = getUnixDate();
 
-function getTypeId () {
+function getTypeId() {
   return actualDay % 18 + 1;
 }
 
-function getPokemonId () {
+function getPokemonId() {
   return actualDay % 811 + 1;
 }
 
@@ -64,11 +64,12 @@ function Home(props) {
   }
 
   //REDUX
-  const dataPkmn = useSelector((state) => state.dataPkmn.pkmn)
+  const dataPkmn = useSelector((state) => state.dataPkmn.pkmn.payload)
   const dataSpecies = useSelector((state) => state.dataPkmn.species)
 
   useEffect(() => {
     openNotification('bottomLeft')
+    console.log(dataPkmn.payload)
   }, [])
 
   return (
@@ -77,7 +78,7 @@ function Home(props) {
       <div className="Panes">
         <div className="leftPane">
           {/* //Pokemon Aléatoire */}
-          {dataPkmn && dataSpecies ? <PokemonCard id={Math.floor(Math.random() * (898 - 1)) + 1} /> : <div></div>}
+          {dataPkmn && dataSpecies ? <PokemonCard id={Math.floor(Math.random() * (811 - 1)) + 1} /> : <div></div>}
         </div>
         <div className="middlePane">
 
@@ -104,14 +105,14 @@ function Home(props) {
             }
           }} />
 
-          {dataPkmn ? < PokemonList nb={60} /> : <div></div>}
+          {dataPkmn ? < PokemonList nb={60} data={dataPkmn} /> : <div></div>}
         </div>
         <div className="rightPane">
-  {/* On veut afficher un Pokemon du jour au hasard pendant 24h */}
-  {dataPkmn && dataSpecies ? <PokemonDuJour id={getPokemonId()} /> : <div></div>} 
-       
-       {/* On veut afficher un type du jour pendant 24h */}
-      {<TypeDuJour id={getTypeId()} />} 
+          {/* On veut afficher un Pokemon du jour au hasard pendant 24h */}
+          {dataPkmn && dataSpecies ? <PokemonDuJour id={getPokemonId()} /> : <div></div>}
+
+          {/* On veut afficher un type du jour pendant 24h */}
+          {<TypeDuJour id={getTypeId()} />}
         </div>
       </div>
       <Footer />
