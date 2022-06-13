@@ -1,62 +1,53 @@
 import React, { useEffect, useState } from 'react';
-import { NavLink, Link, useNavigate, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import '../assets/css/pokemonCard.css'
 import Type from './Type';
-
-import { useSelector } from 'react-redux';
-
 
 const TypeDuJour = (props) => {
 
     const param = useParams()
 
-    const [data, setData] = useState();
+    function getUnixDate(date = new Date()) {
+        const DAY = 1000 * 60 * 60 * 24;
+        return Math.floor(date.getTime() / DAY);
+    }
 
-    //REDUX
-    const dataPkmn = useSelector((state) => state.dataPkmn.pkmn)
+    const actualDay = getUnixDate();
 
-
-    useEffect(() => {
-        if (dataPkmn) {
-            setData(dataPkmn.payload[props.id - 1])
-        }
-    }, [dataPkmn && param])
+    function getTypeId() {
+        return actualDay % 18 + 1;
+    }
 
     const types = {
-        1 : "steel",
-        2 : "fighting",
-        3 : "dragon",
-        4 : "water",
-        5 : "fire",
-        6 : "fairy",
-        7 : "ice",
-        8 : "bug",
-        9 : "normal",
-        10 : "grass",
-        11 : "poison",
-        12 : "psychic",
-        13 : "rock",
-        14 : "ground",
-        15 : "ghost",
-        16 : "dark",
-        17 : "flying",
-        18 : "electric"
+        1: "steel",
+        2: "fighting",
+        3: "dragon",
+        4: "water",
+        5: "fire",
+        6: "fairy",
+        7: "ice",
+        8: "bug",
+        9: "normal",
+        10: "grass",
+        11: "poison",
+        12: "psychic",
+        13: "rock",
+        14: "ground",
+        15: "ghost",
+        16: "dark",
+        17: "flying",
+        18: "electric"
     };
 
     return (
         <div className='card' id="noCursor" >
-            {
-                data ?
-                    <div className="pkmnCard" >
-                        <p className='titleText'> Type du jour : </p>
-                        <div className='types'>
-                            {<Type type={types[props.id]} />}
-                        </div>
-                    </div>
-                    :
-                    <div></div>
-            }
 
+            <div className="pkmnCard" >
+                <p className='titleText'> Type du jour : </p>
+                <div className='types'>
+                    <Type type={types[getTypeId()]} />
+                </div>
+            </div>
         </div>
     );
 };

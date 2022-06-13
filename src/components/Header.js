@@ -3,6 +3,8 @@ import 'antd/dist/antd.css'
 import { SearchOutlined, HomeOutlined, UserOutlined } from '@ant-design/icons'
 import { Menu, Form, Input, AutoComplete } from 'antd';
 
+import { typesId } from './Type';
+
 import '../assets/css/App.css'
 import { NavLink, useNavigate, useLocation } from 'react-router-dom';
 import { useSelector } from 'react-redux';
@@ -64,18 +66,18 @@ const Header = () => {
     const menus = Object.entries(searchMap).map((key) => {
         return (<Menu.Item key={key[0]} icon={<UserOutlined />}>{key[1].name}</Menu.Item>)
     });
-    const menu = () => {
-        return (<Menu onClick={handleMenuClick}>{menus}</Menu>)
-    }
-    const handleMenuClick = () => {
-    }
     const [options, setOptions] = useState([]);
+    const [value, setValue] = useState('');
 
-    const handleSearch = (value) => {
+    const onChange = (data) => {
+        setValue(data);
+    };
+
+    const handleSearch = (data) => {
         setOptions([])
-        if (value.length > 2) {
+        if (data.length > 2) {
             //enlever les deux premiers caractères
-            let search = replaceSpec(value.substring(2));
+            let search = replaceSpec(data.substring(2));
 
             //setOptions pour afficher les résultats de possibilités
             let values = []
@@ -92,33 +94,52 @@ const Header = () => {
 
         }
     }
-    const onSelect = (value) => {
-        let idsearch = 1
-        speciesNameId.forEach((name, id) => {
-            let tmp = replaceSpec(name).toLowerCase()
-            if (tmp == value) {
-                idsearch = id
-                //quitter la boucle
-                return false
-            }
-        })
-        navigate("/pokemon/" + idsearch)
+    const onSelect = (data) => {
+        let idsearch = 0
+        let types = new Map(Object.entries(typesId))
+        let searchEntry = value.substring(2)
+        if (value.startsWith("p/")) {
+            speciesNameId.forEach((name, id) => {
+                let tmp = replaceSpec(name).toLowerCase()
+                searchEntry
+                if (tmp === data) {
+                    idsearch = id
+                    return false
+                }
+            })
+            navigate("/pokemon/" + idsearch)
+        }
+        else if (value.startsWith("t/")) {
+            types.forEach((id, name) => {
+                if (name === data) {
+                    idsearch = id
+                    return false
+                }
+            })
+            navigate("/type/" + idsearch)
+        }
+
     };
 
     const navigate = useNavigate()
     const location = useLocation()
     const speciesNameId = useSelector((state) => state.dataPkmn.speciesNameId.payload)
     const [search, setSearch] = useState("");
-    const [possiblites, setPossiblites] = useState();
+    const [possiblites, setPossiblites] = useState([]);
+    const [possibilities, setPossibilities] = useState([]);
 
     const handleSearchOnChange = (event) => {
         var text = event.target.value
+        setPossibilities([]);
+        setPossiblites([]);
+        let valuePossibilities = []
+        let types = new Map(Object.entries(typesId))
         setSearchMap(new Map())
         switch (true) {
             case text.startsWith("p/"):
                 text = text.substring(2)
-                let possibilities = []
-                let valuePossibilities = []
+
+
                 speciesNameId.forEach((value, key) => {
                     let tmp = replaceSpec(value.toLowerCase())
                     if (tmp.includes(text)) {
@@ -132,7 +153,21 @@ const Header = () => {
                     setSearch("/pokemon/" + possibilities[0])
                 }
                 break;
-
+            case text.startsWith("t/"):
+                text = text.substring(2)
+                types.forEach((key, value) => {
+                    let tmp = replaceSpec(value.toLowerCase())
+                    if (tmp.includes(text)) {
+                        possibilities.push(key)
+                        valuePossibilities.push(tmp)
+                        searchMap.set(key, value)
+                    }
+                });
+                setPossiblites(valuePossibilities)
+                if (possibilities.length == 1) {
+                    setSearch("/type/" + possibilities[0])
+                }
+                break;
             default:
                 break;
         }
@@ -140,6 +175,7 @@ const Header = () => {
 
     useEffect(() => {
         setSearch("")
+        setPossiblites([])
     }, [location]);
 
 
@@ -158,6 +194,7 @@ const Header = () => {
                             options={options}
                             onSelect={onSelect}
                             onSearch={handleSearch}
+                            onChange={onChange}
                         >
                             <Input type="search"
                                 id='searchInput'

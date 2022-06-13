@@ -4,28 +4,14 @@ import Header from '../components/Header';
 import Footer from '../components/Footer';
 import PokemonDuJour from '../components/PokemonDuJour';
 import TypeDuJour from '../components/TypeDuJour';
+import PokemonCard from '../components/PokemonCard';
+
 import '../assets/css/App.css';
 import { useParams, useLocation, useNavigate } from 'react-router-dom';
 
 import { useSelector } from 'react-redux';
-import { renderIntoDocument } from 'react-dom/test-utils';
 
 // Pokemon et type du jour
-
-function getUnixDate(date = new Date()) {
-    const DAY = 1000 * 60 * 60 * 24;
-    return Math.floor(date.getTime() / DAY);
-}
-
-const actualDay = getUnixDate();
-
-function getTypeId() {
-    return actualDay % 18 + 1;
-}
-
-function getPokemonId() {
-    return actualDay % 811 + 1;
-}
 
 const MovePage = (props) => {
     const param = useParams()
@@ -37,39 +23,57 @@ const MovePage = (props) => {
     const [moves, setMoves] = useState([]);
     const [movesData, setMovesData] = useState([]);
     const [moveData, setMoveData] = useState();
+    const [moveName, setMoveName] = useState();
+    const [meta, setMeta] = useState();
+    const [power, setPower] = useState();
+    const [pp, setPp] = useState();
+    const [priority, setPriority] = useState();
+    const [stat_changes, setStat_changes] = useState();
+    const [type, setType] = useState();
+    const [super_contest_effect, setSuper_contest_effect] = useState();
 
     //Redux
     const dataPkmn = useSelector((state) => state.dataPkmn.pkmn)
     const dataSpecies = useSelector((state) => state.dataPkmn.species)
 
-useEffect(() => {
-    if (param) {
-        fetch("https://pokeapi.co/api/v2/move/" + param.id)
-            .then(response => response.json())
-            .then(data => {
-                setTypeData(data)
+    useEffect(() => {
+        if (param) {
+            fetch("https://pokeapi.co/api/v2/move/" + param.id)
+                .then(response => response.json())
+                .then(data => {
+                    setMoveData(data)
 
-            })
-            .catch(error => console.log(error))
-    }
-}, [param]);
-
-
-useEffect(() => {
-    if (pokemons) {
-        if (pokemonsData) {
-            pokemons.forEach(item => {
-                fetch(item.pokemon.url)
-                    .then(response => response.json())
-                    .then(data => {
-                        pokemonsData.push(data)
-                    })
-                    .catch(error => console.log(error))
-            })
+                })
+                .catch(error => console.log(error))
         }
+    }, [param]);
 
-    }
-}, [pokemons]);
+    useEffect(() => {
+        if (moveData) {
+            moveData.names.forEach(item => {
+                if (item.language.name == "fr") {
+                    setMoveName(item.name)
+                }
+            })
+
+            setMeta(moveData.meta)
+            setPower(moveData.power)
+            setPp(moveData.pp)
+            setPriority(moveData.priority)
+            setStat_changes(moveData.stat_changes)
+            setType(moveData.type)
+            setSuper_contest_effect(moveData.super_contest_effecta)
+
+        }
+    }, [moveData]);
+
+    //Set all data
+    useEffect(() => {
+        var id = param.id
+        setMoveData(undefined)
+    }, [location]);
+
+
 
     const handleClickMove = (id) => {
         if (id) {
@@ -139,12 +143,15 @@ useEffect(() => {
                     {/* //Pokemon Aléatoire */}
                     <PokemonCard id={Math.floor(Math.random() * (811 - 1)) + 1} />
                 </div>
+                <div className="middlePane">
+
+                </div>
                 <div className="rightPane">
                     {/* On veut afficher un Pokemon du jour au hasard pendant 24h */}
-                    {dataPkmn && dataSpecies ? <PokemonDuJour id={getPokemonId()} /> : <div></div>}
+                    {dataPkmn && dataSpecies ? <PokemonDuJour /> : <div></div>}
 
                     {/* On veut afficher un type du jour pendant 24h */}
-                    {<TypeDuJour id={getTypeId()} />}
+                    {<TypeDuJour />}
                 </div>
             </div>
             <Footer />
