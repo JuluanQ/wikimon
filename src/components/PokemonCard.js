@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { NavLink, Link, useNavigate, useParams } from 'react-router-dom';
+import { NavLink, Link, useNavigate, useParams, useLocation } from 'react-router-dom';
 import '../assets/css/pokemonCard.css'
 import Type from './Type';
 
@@ -18,6 +18,8 @@ const PokemonCard = (props) => {
     const [data, setData] = useState();
     const [species, setSpecies] = useState();
 
+    const location = useLocation()
+
     //REDUX
     const dataPkmn = useSelector((state) => state.dataPkmn.pkmn)
     const dataSpecies = useSelector((state) => state.dataPkmn.species)
@@ -26,8 +28,8 @@ const PokemonCard = (props) => {
 
     const handleClick = () => {
         if (pkmnId) {
-            setType1("")
-            setType2("")
+            setType1(undefined)
+            setType2(undefined)
             navigate("/pokemon/" + pkmnId);
 
         }
@@ -66,6 +68,11 @@ const PokemonCard = (props) => {
         }
     }, [dataSpecies && param]);
 
+    useEffect(() => {
+        setType1(undefined)
+        setType2(undefined)
+    }, [location]);
+
     return (
         <div className='card' >
             {
@@ -76,10 +83,10 @@ const PokemonCard = (props) => {
                         <div className='types'>
                             {type1 ?
                                 <Type type={type1} />
-                                : <div className='emptyType'></div>}
+                                : <></>}
                             {type2 ?
                                 <Type type={type2} />
-                                : <div className='emptyType'></div>}
+                                : <></>}
                         </div>
                     </div>
                     :

@@ -14,20 +14,20 @@ import { render } from '@testing-library/react';
 import PokemonList from '../components/PokemonList';
 
 //Pokemon et type du jour
-function getUnixDate (date = new Date()) {
+function getUnixDate(date = new Date()) {
     const DAY = 1000 * 60 * 60 * 24;
     return Math.floor(date.getTime() / DAY);
-  }
-  
-  const actualDay = getUnixDate();
-  
-  function getTypeId () {
+}
+
+const actualDay = getUnixDate();
+
+function getTypeId() {
     return actualDay % 18 + 1;
-  }
-  
-  function getPokemonId () {
+}
+
+function getPokemonId() {
     return actualDay % 811 + 1;
-  }
+}
 
 const TypePage = () => {
 
@@ -52,7 +52,7 @@ const TypePage = () => {
     const [source, setSource] = useState([]);
 
     //Redux
-    const dataPkmn = useSelector((state) => state.dataPkmn.pkmn)
+    const dataPkmn = useSelector((state) => state.dataPkmn.pkmn.payload)
     const dataSpecies = useSelector((state) => state.dataPkmn.species)
 
     useEffect(() => {
@@ -65,21 +65,20 @@ const TypePage = () => {
                 })
                 .catch(error => console.log(error))
         }
+        setPokemonsData([])
     }, [param]);
 
     useEffect(() => {
         if (pokemons) {
-            if (pokemonsData) {
-                pokemons.forEach(item => {
-                    fetch(item.pokemon.url)
-                        .then(response => response.json())
-                        .then(data => {
-                            pokemonsData.push(data)
-                        })
-                        .catch(error => console.log(error))
-                })
-            }
-
+            setPokemonsData([])
+            pokemons.forEach(item => {
+                fetch(item.pokemon.url)
+                    .then(response => response.json())
+                    .then(data => {
+                        setPokemonsData(pokemonsData => [...pokemonsData, data])
+                    })
+                    .catch(error => console.log(error))
+            })
         }
     }, [pokemons]);
 
@@ -107,7 +106,9 @@ const TypePage = () => {
     useEffect(() => {
         var id = param.id
         setTypeData(undefined)
-        setData(dataPkmn.payload[id - 1])
+        setPokemonsData([])
+        document.getElementById("imgsList").innerHTML = ""
+        setData(dataPkmn[id - 1])
         setSpecies(dataSpecies.payload[id - 1])
     }, [location]);
 
@@ -123,22 +124,15 @@ const TypePage = () => {
                 </div>
                 <div className="middlePane">
                     {typeData ? <Type type={typeData.name} /> : <></>}
-                    {
-                        pokemonsData && pokemonsData.length > 0 ?
-                            <>
-                                <h3 style={{ color: "#fff", textAlign: "left", marginLeft: "2em" }}>Pokemons de ce type :</h3>
-                                <PokemonList nb={811} data={pokemonsData} />
-                            </>
-                            : <></>
-                    }
-
+                    <h3 style={{ color: "#fff", textAlign: "left", marginLeft: "2em" }}>Pokemons de ce type :</h3>
+                    {location ? <PokemonList nb={811} data={pokemonsData} /> : <></>}
                 </div>
                 <div className="rightPane">
- {/* On veut afficher un Pokemon du jour au hasard pendant 24h */}
- {dataPkmn && dataSpecies ? <PokemonDuJour id={getPokemonId()} /> : <div></div>} 
-       
-{/* On veut afficher un type du jour pendant 24h */}
-{<TypeDuJour id={getTypeId()} />} 
+                    {/* On veut afficher un Pokemon du jour au hasard pendant 24h */}
+                    {dataPkmn && dataSpecies ? <PokemonDuJour id={getPokemonId()} /> : <div></div>}
+
+                    {/* On veut afficher un type du jour pendant 24h */}
+                    {<TypeDuJour id={getTypeId()} />}
                 </div>
             </div>
             <Footer />
