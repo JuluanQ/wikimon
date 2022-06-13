@@ -13,7 +13,7 @@ import { Slider, notification } from 'antd';
 
 import { useSelector } from 'react-redux';
 
-// A DEPLACER SI TU VEUX
+// Pokemon et type du jour
 
 function getUnixDate(date = new Date()) {
   const DAY = 1000 * 60 * 60 * 24;
