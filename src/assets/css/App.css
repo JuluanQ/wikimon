@@ -254,3 +254,31 @@ body {
 #noCursor {
   margin-top: 3em;
 }
+
+
+/*
+  Pour afficher proprement l'attaque sur la page d'attaque
+*/
+#onlyMove {
+  color: #aaaaaa;
+  display: flex;
+  font-size: 1.7em;
+  flex-direction: column;
+  align-self: center;
+}
+
+#first_row_only_move {
+  display: flex;
+  justify-content: space-evenly;
+}
+
+.bold {
+  font-weight: bold;
+}
+
+.centered {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  flex-direction: column;
+}
